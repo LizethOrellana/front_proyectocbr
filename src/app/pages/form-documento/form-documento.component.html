@@ -1,0 +1,37 @@
+<form class="form">
+    <span class="title">Registrar Documento</span>
+    <label for="arquivo">Choose a file:</label>
+    <input accept=".pdf, .docx" class="inpdddut" name="arquivo" id="arquivo" type="file" (change)="onFileSelected($event)">
+
+    <label class="label">Título</label>
+    <input type="text" placeholder="Título" [(ngModel)]="documento.titulo" name="titulo" class="input">
+
+    <label class="label">Resumen</label>
+    <textarea placeholder="Resumen" [(ngModel)]="documento.resumen" name="resumen" class="input"></textarea>
+    <div *ngIf="errorMessage" class="error-notification">{{ errorMessage }}</div>
+
+    <label class="label">Autor</label>
+    <input type="text" placeholder="Autor" [(ngModel)]="autorBusqueda" (input)="buscarAutor()" name="autor"
+        class="input">
+    <ul *ngIf="autores.length > 0 || autorBusqueda" class="opciones">
+        <li *ngFor="let autor of autores" (click)="seleccionarAutor(autor)">{{ autor.nombre }}</li>
+        <button *ngIf="!autorExisteEnLista() && autorBusqueda" type="button" (click)="crearAutor()">Crear "{{
+            autorBusqueda }}"</button>
+    </ul>
+
+    <label class="label">Carrera</label>
+    <input type="text" placeholder="Carrera" [(ngModel)]="carreraBusqueda" (input)="buscarCarrera()" name="carrera"
+        class="input">
+    <ul *ngIf="carreras.length > 0 || carreraBusqueda" class="opciones">
+        <li *ngFor="let carrera of carreras" (click)="seleccionarCarrera(carrera)">{{ carrera.nombre }}</li>
+        <button *ngIf="!carreraExisteEnLista() && carreraBusqueda" type="button" (click)="crearCarrera()">Crear "{{
+            carreraBusqueda }}"</button>
+    </ul>
+
+    <label class="label">Año de Publicación</label>
+    <select [(ngModel)]="anioSeleccionado" name="anioSeleccionado" class="input">
+        <option *ngFor="let anio of anios" [value]="anio">{{ anio }}</option>
+    </select>
+
+    <button type="submit" class="submit" (click)="guardar()">Guardar</button>
+</form>

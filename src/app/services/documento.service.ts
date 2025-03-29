@@ -8,6 +8,7 @@ import { Documento } from '../models/Documento';
   providedIn: 'root'
 })
 export class DocumentoService {
+  
 private URL_DOCUMENTO: string;
 
   constructor(private http: HttpClient, private generalService: GeneralService) {
@@ -15,7 +16,7 @@ private URL_DOCUMENTO: string;
   }
 
   obtenerDocumentos(): Observable<Documento[]> {
-    return this.http.get<[Documento]>(`${this.generalService.baseUrl}`);
+    return this.http.get<[Documento]>(`${this.URL_DOCUMENTO}`);
   }
 
   editarDocumento(id: any, Documento: any[]): Observable<string> {
@@ -23,6 +24,6 @@ private URL_DOCUMENTO: string;
   }
 
   registrarDocumento(Documento: any): Observable<any> {
-    return this.http.post<any>(`${this.URL_DOCUMENTO}`, Documento);
+    return this.http.post<any>(`${this.URL_DOCUMENTO}/crear`, Documento);
   }
 }

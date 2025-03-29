@@ -25,4 +25,12 @@ private URL_CARRERA: string;
   registrarCarreras(Carrera: any): Observable<any> {
     return this.http.post<any>(`${this.URL_CARRERA}`, Carrera);
   }
+
+  buscarCarreras(nombre: string): Observable<any[]> {
+    return this.http.get<any[]>(`${this.URL_CARRERA}/buscar?nombre=${nombre}`);
+  }
+
+  crearCarrera(nombre: string): Observable<any> {
+    return this.http.post<any>(`${this.URL_CARRERA}/crear`, { nombre: nombre });
+  }
 }

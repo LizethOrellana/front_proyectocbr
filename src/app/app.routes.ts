@@ -8,27 +8,14 @@ import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { bootstrapApplication } from '@angular/platform-browser';
+import { provideRouter } from '@angular/router';
+import { provideHttpClient } from '@angular/common/http';
+import { FormDocumentoComponent } from './pages/form-documento/form-documento.component';
 
 export const routes: Routes = [
-    { path: 'app', component: AppComponent },
-    { path: '', component: HomeComponent },
-    { path: 'app-header', component: HeaderComponent },
-    { path: 'app-footer', component: FooterComponent },
+  { path: '', component: HomeComponent },
+  { path: 'crear-documento', component: FormDocumentoComponent },
+  { path: 'header', component: HeaderComponent },
+  { path: 'footer', component: FooterComponent },
 ];
-
-@NgModule({
-    imports: [
-        BrowserModule,
-        HttpClientModule,
-        RouterModule.forRoot(routes),
-        AppComponent, 
-        HomeComponent,
-        HeaderComponent,
-        FooterComponent,
-        FormsModule,
-        CommonModule,
-    ],
-    providers: [],
-    bootstrap: [AppComponent] 
-})
-export class AppModule { }

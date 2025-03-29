@@ -18,13 +18,13 @@ export class HomeComponent {
 
   constructor(private documentoService: DocumentoService,) { }
   ngOnInit(): void {
-    this.obtenerDocumentos()
+    console.log("Home")
+    this.obtenerDocumentos() // Descomenta esta linea
   }
 
   obtenerDocumentos(){
-    this.documentoService.obtenerDocumentos().subscribe((response)=>{
+    this.documentoService.obtenerDocumentos().subscribe((response: Documento[])=>{ // Cambia [Documento] a Documento[]
       this.documentos=response;
     })
-    
   }
 }
