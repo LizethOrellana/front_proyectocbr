@@ -1,3 +1,15 @@
+.contenedor-scroll {
+    max-height: 300px; /* Ajusta la altura máxima */
+    max-width: 500px;  /* Opcional: ajusta el ancho máximo */
+    overflow-y: auto;  /* Habilita el scroll vertical */
+    overflow-x: auto;  /* Opcional: habilita el scroll horizontal */
+    border: 1px solid #ccc; /* Opcional: añade un borde para identificar el área */
+    padding: 10px;    /* Opcional: añade un margen interno */
+    margin-bottom: 20px;
+    
+}
+
+
 .home-container {
   padding: 20px;
 }
@@ -42,7 +54,9 @@
 }
 
 .filter-item {
-  display: flex;
+  max-width: 900px;  /* Opcional: ajusta el ancho máximo */
+
+  
   position: relative;
   justify-content: space-between;
   margin-bottom: 5px;
@@ -186,6 +200,8 @@
 }
 
 .autor-list {
+  overflow-y: auto;  /* Habilita el scroll vertical */
+  overflow-x: auto;  /* Opcional: habilita el scroll horizontal */
   margin-top: 5px;
   /* Espacio entre el botón y la lista */
   position: absolute;

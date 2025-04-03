@@ -11,8 +11,8 @@
         <div class="filter-item">
           Autor
           <button class="buttonpositivo" (click)="listarAutor()">{{ mostrarAutores ? '-' : '+' }}</button>
-          <div *ngIf="mostrarAutores" class="autor-list">
-            <div *ngFor="let autor of autores" class="autor-item">
+          <div *ngIf="mostrarAutores" class="contenedor-scroll">
+            <div *ngFor="let autor of autores" class="autor-item" style="justify-content: center;">
               <button (click)="buscarxAutor(autor)">{{autor.nombre}}</button>
             </div>
           </div>
@@ -20,8 +20,8 @@
         <div class="filter-item">
           Carreras
           <button class="buttonpositivo" (click)="listarCarreras()">{{ mostrarCarreras ? '-' : '+' }}</button>
-          <div *ngIf="mostrarCarreras" class="autor-list">
-            <div *ngFor="let carrera of carreras" class="autor-item">
+          <div *ngIf="mostrarCarreras" class="contenedor-scroll">
+            <div *ngFor="let carrera of carreras" class="autor-item" style="justify-content: center;">
               <button (click)="buscarxCarrera(carrera)">{{carrera.nombre}}</button>
             </div>
           </div>
@@ -29,8 +29,8 @@
         <div class="filter-item">
           Año de Publicación
           <button class="buttonpositivo" (click)="generarAnios()">{{ mostrarAnios ? '-' : '+' }}</button>
-          <div *ngIf="mostrarAnios" class="autor-list">
-            <div *ngFor="let anio of anios" class="autor-item">
+          <div *ngIf="mostrarAnios" class="contenedor-scroll">
+            <div *ngFor="let anio of anios" class="autor-item"  style="justify-content: center;">
               <button (click)="buscarxAnio(anio)">{{anio}}</button>
             </div>
           </div>
