@@ -1,7 +1,8 @@
 <form class="form">
     <span class="title">Registrar Documento</span>
     <label for="arquivo">Choose a file:</label>
-    <input accept=".pdf, .docx" class="inpdddut" name="arquivo" id="arquivo" type="file" (change)="onFileSelected($event)">
+    <input accept=".pdf, .docx" class="inpdddut" name="arquivo" id="arquivo" type="file"
+        (change)="onFileSelected($event)">
 
     <label class="label">Título</label>
     <input type="text" placeholder="Título" [(ngModel)]="documento.titulo" name="titulo" class="input">

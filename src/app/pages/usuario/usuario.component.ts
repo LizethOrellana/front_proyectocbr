@@ -27,6 +27,8 @@ export class UsuarioComponent implements OnInit {
 
   maxUsuarios: number = 5;
 
+  esEditar: Boolean = false;
+
   constructor(private usuarioService: UsuarioService) { }
 
   ngOnInit() {
@@ -39,7 +41,7 @@ export class UsuarioComponent implements OnInit {
     });
   }
 
-  vaciarCampos(){
+  vaciarCampos() {
     this.nuevoUsuario = {
       id_usuario: undefined,
       nombre: '',
@@ -52,45 +54,45 @@ export class UsuarioComponent implements OnInit {
   }
 
   crearUsuario() {
-    // Validar campos llenos
-    if (!this.nuevoUsuario.cedula || !this.nuevoUsuario.nombre || 
+    if (this.esEditar == true) {
+      this.editarUsuario(this.nuevoUsuario);
+    } else {
+      if (!this.nuevoUsuario.cedula || !this.nuevoUsuario.nombre ||
         !this.nuevoUsuario.primera_pregunta || !this.nuevoUsuario.segunda_pregunta ||
         !this.nuevoUsuario.contrasenia || !this.repcontrasenia) {
-      alert("Por favor, complete todos los campos.");
-      return; // Detener la creación del usuario
-    }
+        alert("Por favor, complete todos los campos.");
+        return;
+      }
 
-    // Validar contraseñas coincidentes
-    if (this.repcontrasenia !== this.nuevoUsuario.contrasenia) {
-      alert("Las contraseñas no coinciden.");
-      return; // Detener la creación del usuario
-    }
+      if (this.repcontrasenia !== this.nuevoUsuario.contrasenia) {
+        alert("Las contraseñas no coinciden.");
+        return;
+      }
 
-    // Validar número máximo de usuarios
-    if (this.usuarios.length >= this.maxUsuarios) {
-      alert(`No se pueden crear más de ${this.maxUsuarios} usuarios.`);
-      return; // Detener la creación del usuario
-    }
+      if (this.usuarios.length >= this.maxUsuarios) {
+        alert(`No se pueden crear más de ${this.maxUsuarios} usuarios.`);
+        return;
+      }
 
-    // Crear usuario si todas las validaciones pasan
-    this.nuevoUsuario.rol = "CONTRIBUIDOR";
-    this.usuarioService.crearUsuario(this.nuevoUsuario).subscribe(() => {
-      this.cargarUsuarios();
-      this.nuevoUsuario = {
-        id_usuario: undefined,
-        nombre: '',
-        contrasenia: '',
-        cedula: '',
-        rol: '',
-        primera_pregunta: '',
-        segunda_pregunta: ''
-      };
-      this.repcontrasenia = ''; // Limpiar la contraseña repetida
-    });
+      this.nuevoUsuario.rol = "CONTRIBUIDOR";
+      this.usuarioService.crearUsuario(this.nuevoUsuario).subscribe(() => {
+        this.cargarUsuarios();
+        this.nuevoUsuario = {
+          id_usuario: undefined,
+          nombre: '',
+          contrasenia: '',
+          cedula: '',
+          rol: '',
+          primera_pregunta: '',
+          segunda_pregunta: ''
+        };
+        this.repcontrasenia = '';
+      });
+    }
   }
 
   editarUsuario(usuario: Usuario) {
-    this.usuarioService.editarUsuario(usuario.cedula,usuario).subscribe(()=>{
+    this.usuarioService.editarUsuario(usuario.cedula, usuario).subscribe(() => {
       this.cargarUsuarios();
       this.vaciarCampos();
     })
@@ -98,7 +100,8 @@ export class UsuarioComponent implements OnInit {
 
   seleccionarEditar(usuario: Usuario) {
     console.log('Editar usuario:', usuario);
-    this.nuevoUsuario=usuario;
+    this.nuevoUsuario = usuario;
+    this.esEditar = true;
   }
 
   eliminarUsuario(cedula: string): void {
@@ -106,13 +109,12 @@ export class UsuarioComponent implements OnInit {
       this.usuarioService.eliminarUsuario(cedula).subscribe(
         response => {
           console.log('Usuario eliminado:', response);
-          this.usuarioService.eliminarUsuario(cedula).subscribe(()=>{
+          this.usuarioService.eliminarUsuario(cedula).subscribe(() => {
             this.cargarUsuarios();
           })
         },
         error => {
           console.error('Error al eliminar usuario:', error);
-          // Mostrar mensaje de error
         }
       );
     }
