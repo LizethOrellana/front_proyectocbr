@@ -11,11 +11,17 @@ import { CommonModule } from '@angular/common';
 import { bootstrapApplication } from '@angular/platform-browser';
 import { provideRouter } from '@angular/router';
 import { provideHttpClient } from '@angular/common/http';
-import { FormDocumentoComponent } from './pages/form-documento/form-documento.component';
+import { DocumentoComponent } from './pages/documento/documento.component';
+import { IniciarSesionComponent } from './pages/iniciar-sesion/iniciar-sesion.component';
+import { UsuarioComponent } from './pages/usuario/usuario.component';
+
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
-  { path: 'crear-documento', component: FormDocumentoComponent },
+  { path: 'crear-documento', component: DocumentoComponent },
+  { path: 'crear-usuario', component: UsuarioComponent },
+  { path: 'iniciar-sesion', component: IniciarSesionComponent },
   { path: 'header', component: HeaderComponent },
   { path: 'footer', component: FooterComponent },
 ];
+

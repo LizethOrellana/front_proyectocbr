@@ -1,35 +1,65 @@
-<form class="d-flex buscar" role="search">
-    <!--<input class="form-control me-2" (keyup)="onKeydownEvent($event, buscaer.value)" #buscaer
-                type="search" placeholder="Buscar" aria-label="Buscar"
-                style="background-color: #e5e7e8; border-color: #2e2f5e" />
-            <button (click)="buscarLibxNomb(buscaer.value)" class="btn" type="submit">
-                <img
-                    src="https://firebasestorage.googleapis.com/v0/b/istateca.appspot.com/o/Iconos%2Fbusqueda.png?alt=media&token=2b59078d-0ef5-4fa4-85c6-396ea7c1c97c" />
-            </button>-->
-</form><br>
-<table class="table table-bordered table-stripped libros">
-    <thead class="text-center cabezera">
-        <tr>
-            <th>ID</th>
-            <th>Título del Documento</th>
-            <th>Resumen</th>
-            <th>Año de Publicación</th>
-            <th>Autor</th>
-            <th>Carrera</th>
-            <th>Accion</th>
-        </tr>
-    </thead>
-    <tbody class="text-center">
-        <tr *ngFor="let documento of documentos">
-            <td>{{ documento.id_documento}}</td>
-            <td>{{ documento.titulo }}</td>
-            <td>{{ documento.resumen }}</td>
-            <td>{{ documento.anioPublicacion }}</td>
-            <td>{{ documento.autor.nombre }}</td>
-            <td>{{ documento.carrera.nombre }}</td>
-            <td>
-                <!-- <button (click)="SolicitarLibro(pagina)">Solicitar</button>-->
-            </td>
-        </tr>
-    </tbody>
-</table>
+<div class="home-container">
+  <div class="search-bar">
+    <input type="text" [(ngModel)]="nombreBusqueda" placeholder="Buscar en el repositorio...">
+    <button (click)="buscarDocumentos()">Buscar</button>
+  </div>
+
+  <div class="content-container">
+    <div class="filters">
+      <div class="filter-group">
+        <div class="filter-header">Filtros</div>
+        <div class="filter-item">
+          Autor
+          <button (click)="listarAutor()">{{ mostrarAutores ? '-' : '+' }}</button>
+          <div *ngIf="mostrarAutores" class="autor-list">
+            <div *ngFor="let autor of autores" class="autor-item">
+              <button (click)="buscarxAutor(autor)">{{autor.nombre}}</button>
+            </div>
+          </div>
+        </div>
+        <div class="filter-item">
+          Carreras
+          <button (click)="listarCarreras()">{{ mostrarCarreras ? '-' : '+' }}</button>
+          <div *ngIf="mostrarCarreras" class="autor-list">
+            <div *ngFor="let carrera of carreras" class="autor-item">
+              <button (click)="buscarxCarrera(carrera)">{{carrera.nombre}}</button>
+            </div>
+          </div>
+        </div>
+        <div class="filter-item">
+          Año de Publicación
+          <button (click)="generarAnios()">{{ mostrarAnios ? '-' : '+' }}</button>
+          <div *ngIf="mostrarAnios" class="autor-list">
+            <div *ngFor="let anio of anios" class="autor-item">
+              <button (click)="buscarxAnio(anio)">{{anio}}</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="results">
+        <div class="results-header">
+          Search Results
+          <div class="results-count">Mostrando 1 - {{ documentos.length }} de {{ documentos.length }}</div>
+        </div>
+
+        <div class="document-list">
+          <div class="document-item" *ngFor="let documento of documentos">
+            <div class="document-details">
+              <div class="document-title">{{ documento.titulo }}</div>
+              <div class="document-date">{{ documento.anioPublicacion }}</div>
+              <div class="document-authors">{{ documento.autor.nombre }}</div>
+              <div class="document-summary">{{ documento.resumen }}</div>
+              <button class="view-document" (click)="verDocumento(documento)">Ver documento</button>
+              <button class="view-document" (click)="editarDocumento(documento)">Editar</button>
+              <button *ngIf="documento.id_documento" (click)="eliminarDocumento(documento.id_documento)">Eliminar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="rss-button">
+        <button>RSS</button>
+      </div>
+    </div>
+  </div>

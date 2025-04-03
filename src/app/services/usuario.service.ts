@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { GeneralService } from './general.service';
 import { Observable } from 'rxjs';
@@ -14,15 +14,27 @@ export class UsuarioService {
     this.URL_USUARIO = `${this.generalService.baseUrl}/api/usuarios`;
   }
 
-  obtenerUsuarios(): Observable<Usuario[]> {
-    return this.http.get<[Usuario]>(`${this.generalService.baseUrl}`);
+  getUsuarios(): Observable<Usuario[]> {
+    return this.http.get<Usuario[]>(this.URL_USUARIO);
   }
 
-  editarUsuario(id: any, Usuario: any[]): Observable<string> {
-    return this.http.put<string>(`${this.URL_USUARIO}/${id}`, Usuario);
+  crearUsuario(usuario: Usuario): Observable<Usuario> {
+    return this.http.post<Usuario>(`${this.URL_USUARIO}/crearusuario`, usuario);
   }
 
-  registrarUsuario(Usuario: any): Observable<any> {
-    return this.http.post<any>(`${this.URL_USUARIO}`, Usuario);
+  eliminarUsuario(cedula: string): Observable<any> {
+    return this.http.delete(`${this.URL_USUARIO}/eliminarusuario/${cedula}`);
   }
+
+  iniciarSesion(cedula: string, contrasenia: string): Observable<Usuario> {
+    const params = new HttpParams()
+      .set('cedula', cedula)
+      .set('contrasenia', contrasenia);
+    return this.http.post<Usuario>(`${this.URL_USUARIO}/iniciarsesion`, params);
+  }
+
+  editarUsuario(cedula: string, usuario: any): Observable<any> {
+    return this.http.put(`${this.URL_USUARIO}/editarusuario/${cedula}`, usuario);
+  }
+
 }

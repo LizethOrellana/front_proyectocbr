@@ -15,7 +15,7 @@ private URL_CARRERA: string;
   }
 
   obtenerCarrera(): Observable<Carrera[]> {
-    return this.http.get<[Carrera]>(`${this.generalService.baseUrl}`);
+    return this.http.get<[Carrera]>(`${this.URL_CARRERA}`);
   }
 
   editarCarreras(id: any, Carrera: any[]): Observable<string> {

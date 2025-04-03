@@ -17,7 +17,7 @@ export class AutorService {
   }
 
   obtenerAutores(): Observable<Autor[]> {
-    return this.http.get<[Autor]>(`${this.generalService.baseUrl}`);
+    return this.http.get<[Autor]>(`${this.URL_AUTOR}`);
   }
 
   editarAutores(id: any, Autor: any[]): Observable<string> {

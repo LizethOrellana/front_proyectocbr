@@ -8,17 +8,17 @@ import { AutorService } from '../../services/autor.service';
 import { CarreraService } from '../../services/carrera.service';
 import { Autor } from '../../models/Autor';
 import { Carrera } from '../../models/Carrera';
+import { ActivatedRoute } from '@angular/router';
 @Component({
-  selector: 'app-form-documento',
+  selector: 'app-documento',
   standalone: true,
-  imports: [FormsModule, CommonModule], // Añade CommonModule aquí
-  templateUrl: './form-documento.component.html',
-  styleUrls: ['./form-documento.component.css']
+  imports: [FormsModule, CommonModule],
+  templateUrl: './documento.component.html',
+  styleUrl: './documento.component.css'
 })
-export class FormDocumentoComponent implements OnInit {
+export class DocumentoComponent implements OnInit {
   documento: Documento = {
     id_documento: undefined,
-    contenido: '',
     titulo: '',
     resumen: '',
     anioPublicacion: 0,
@@ -40,15 +40,47 @@ export class FormDocumentoComponent implements OnInit {
   carreras: Carrera[] = [];
   errorMessage: string = '';
   selectedFile: File | null = null;
+  esEditar: Boolean = false;
 
   constructor(
     private http: HttpClient,
+    private route: ActivatedRoute,
     private documentoService: DocumentoService,
     private autorService: AutorService,
     private carreraService: CarreraService) { }
 
   ngOnInit() {
+    this.route.queryParams.subscribe((params) => {
+      if (params['documento']) {
+        try {
+          this.documento = JSON.parse(params['documento']);
+          this.esEditar = true;
+          this.anioSeleccionado = this.documento.anioPublicacion;
+          this.carreraBusqueda = this.documento.carrera.nombre;
+          this.autorBusqueda = this.documento.autor.nombre;
+        } catch (error) {
+          console.error('Error al analizar JSON:', error);
+        }
+      }
+    });
+
+    console.log('Lo que llega:');
+    console.log(this.documento);
     this.generarAnios();
+  }
+
+  base64ToFile(base64String: string, filename: string): File {
+    const arr = base64String.split(',');
+    const match = arr[0].match(/:(.*?);/);
+    const mime = match ? match[1] : 'application/octet-stream'; // Usar un valor predeterminado si no hay coincidencia
+
+    const bstr = atob(arr[1]);
+    let n = bstr.length;
+    const u8arr = new Uint8Array(n);
+    while (n--) {
+      u8arr[n] = bstr.charCodeAt(n);
+    }
+    return new File([u8arr], filename, { type: mime });
   }
 
   onFileSelected(event: any) {
@@ -64,17 +96,35 @@ export class FormDocumentoComponent implements OnInit {
   }
 
   guardar() {
-    if (this.selectedFile) {
-      this.documento.anioPublicacion = this.anioSeleccionado;
-      this.documentoService.registrarDocumento(this.documento).subscribe(
-        (response) => {
-          console.log('Documento guardado', response);
-        },
-        (error) => {
-          console.error('Error al guardar documento', error);
-        }
-      );
+    if (this.esEditar == true) {
+      this.editar()
+    } else {
+      if (this.selectedFile && this.documento.autor.id_autor && this.documento.carrera.id_carrera) {
+        const formData = new FormData();
+        formData.append('file', this.selectedFile, this.selectedFile.name);
+        formData.append('titulo', this.documento.titulo);
+        formData.append('resumen', this.documento.resumen);
+        formData.append('anioPublicacion', this.anioSeleccionado.toString());
+        formData.append('autorId', this.documento.autor.id_autor.toString());
+        formData.append('carreraId', this.documento.carrera.id_carrera.toString());
+
+        this.http.post('http://localhost:8080/api/documentos/crear', formData).subscribe(
+          (response) => {
+            console.log('Documento guardado', response);
+          },
+          (error) => {
+            console.error('Error al guardar documento', error);
+          }
+        );
+      }
     }
+  }
+
+  editar() {
+    this.documento.anioPublicacion = this.anioSeleccionado;
+    this.documentoService.editarDocumento(this.documento).subscribe((documento) => {
+      console.log("Se edito el documento")
+    })
   }
 
   buscarAutor() {
@@ -132,6 +182,6 @@ export class FormDocumentoComponent implements OnInit {
   }
 
   carreraExisteEnLista(): boolean {
-   return this.documento.carrera && this.documento.carrera.nombre === this.carreraBusqueda;
+    return this.documento.carrera && this.documento.carrera.nombre === this.carreraBusqueda;
   }
 }

@@ -1,0 +1,77 @@
+<div class="user-management-container">
+    <h2>Gestión de Usuarios</h2>
+
+    <div class="form-container">
+        <h3>Crear Nuevo Usuario</h3>
+        <form (ngSubmit)="crearUsuario()">
+            <div class="form-group">
+                <label for="cedula">Cédula:</label>
+                <input
+                  type="number"
+                  id="cedula"
+                  name="cedula"
+                  [(ngModel)]="nuevoUsuario.cedula"
+                  maxlength="10"
+                  pattern="[0-9]{10}"
+                  required
+                />
+              </div>
+            <div class="form-group">
+                <label for="nombre">Nombre:</label>
+                <input type="text" id="nombre" name="nombre" [(ngModel)]="nuevoUsuario.nombre" required>
+            </div>
+
+            <div class="form-group">
+                <label>Primera Pregunta de seguridad:</label>
+                <label for="primera_pregunta">¿Cuál es el nombre de tu primera mascota?</label>
+                <input type="text" id="primera_pregunta" name="primera_pregunta"
+                    [(ngModel)]="nuevoUsuario.primera_pregunta" required>
+            </div>
+            <div class="form-group">
+                <label>Segunda Pregunta de seguridad:</label>
+                <label for="segunda_pregunta">¿Cuál es tu ciudad de nacimiento?</label>
+                <input type="text" id="segunda_pregunta" name="segunda_pregunta"
+                    [(ngModel)]="nuevoUsuario.segunda_pregunta" required>
+            </div>
+            <div class="form-group">
+                <label for="contrasenia">Contraseña:</label>
+                <input type="password" id="contrasenia" name="contrasenia" [(ngModel)]="nuevoUsuario.contrasenia"
+                    required>
+            </div>
+            <div class="form-group">
+                <label for="contrasenia">Repita su contraseña:</label>
+                <input type="password" id="contrasenia" name="contrasenia" [(ngModel)]="repcontrasenia" required>
+            </div>
+            <button type="submit">Crear Usuario</button>
+            
+        </form>
+        <button (click)="editarUsuario(nuevoUsuario)">Editar Usuario</button>
+    </div>
+
+    <div class="table-container">
+        <h3>Lista de Usuarios</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Cédula</th>
+                    <th>Rol</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let usuario of usuarios">
+                    <td>{{ usuario.id_usuario }}</td>
+                    <td>{{ usuario.nombre }}</td>
+                    <td>{{ usuario.cedula }}</td>
+                    <td>{{ usuario.rol }}</td>
+                    <td>
+                        <button (click)="seleccionarEditar(usuario)">Editar</button>
+              <button (click)="eliminarUsuario(usuario.cedula)">Eliminar</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
