@@ -1,5 +1,5 @@
-import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { Component, OnInit, HostListener, ElementRef, ViewChild } from '@angular/core';
 import { DocumentoService } from '../../services/documento.service';
 import { Documento } from '../../models/Documento';
 import { FormsModule } from '@angular/forms';
@@ -8,7 +8,9 @@ import { AutorService } from '../../services/autor.service';
 import { CarreraService } from '../../services/carrera.service';
 import { Autor } from '../../models/Autor';
 import { Carrera } from '../../models/Carrera';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import Swal from 'sweetalert2'
+
 @Component({
   selector: 'app-documento',
   standalone: true,
@@ -33,6 +35,10 @@ export class DocumentoComponent implements OnInit {
   };
   anios: number[] = [];
   anioSeleccionado: number = 0;
+  mostrarOpcionesA = false;
+  mostrarOpcionesC = false;
+  btnCrearAutor = false;
+  btnCrearCarrera = false;
 
   autorBusqueda: string = '';
   carreraBusqueda: string = '';
@@ -42,18 +48,33 @@ export class DocumentoComponent implements OnInit {
   selectedFile: File | null = null;
   esEditar: Boolean = false;
 
+  @ViewChild('inputAutorBusqueda') inputAutorBusqueda!: ElementRef;
+  autorSeleccionado: Autor = {
+    id_autor: 0,
+    nombre: '',
+  };
+
+  @ViewChild('inputCarreraBusqueda') inputCarreraBusqueda!: ElementRef;
+  carreraSeleccionado: Autor = {
+    id_autor: 0,
+    nombre: '',
+  };
+
   constructor(
+    private router: Router,
     private http: HttpClient,
     private route: ActivatedRoute,
     private documentoService: DocumentoService,
     private autorService: AutorService,
     private carreraService: CarreraService) { }
 
+
   ngOnInit() {
-    this.route.queryParams.subscribe((params) => {
+    /*this.route.queryParams.subscribe((params) => {
       if (params['documento']) {
         try {
           this.documento = JSON.parse(params['documento']);
+          console.log(this.documento)
           this.esEditar = true;
           this.anioSeleccionado = this.documento.anioPublicacion;
           this.carreraBusqueda = this.documento.carrera.nombre;
@@ -63,11 +84,11 @@ export class DocumentoComponent implements OnInit {
         }
       }
     });
-
-    console.log('Lo que llega:');
-    console.log(this.documento);
     this.generarAnios();
+    this.listarAutor();
+    this.listarCarrera();*/
   }
+
 
   base64ToFile(base64String: string, filename: string): File {
     const arr = base64String.split(',');
@@ -86,6 +107,13 @@ export class DocumentoComponent implements OnInit {
   onFileSelected(event: any) {
     this.selectedFile = event.target.files[0];
     console.log(this.selectedFile)
+  }
+
+  listarAutor() {
+    this.autorService.obtenerAutores().subscribe((autores) => {
+      this.autores = autores;
+      this.btnCrearAutor = false;
+    });
   }
 
   generarAnios() {
@@ -107,13 +135,28 @@ export class DocumentoComponent implements OnInit {
         formData.append('anioPublicacion', this.anioSeleccionado.toString());
         formData.append('autorId', this.documento.autor.id_autor.toString());
         formData.append('carreraId', this.documento.carrera.id_carrera.toString());
-
         this.http.post('http://localhost:8080/api/documentos/crear', formData).subscribe(
-          (response) => {
-            console.log('Documento guardado', response);
+          (response: any) => { // Función para manejar la respuesta exitosa
+            Swal.fire({
+              text: 'Documento Guardado Correctamente',
+              icon: 'success',
+            });
+            console.log('Documento guardado');
+            this.router.navigate(['/']);
           },
-          (error) => {
-            console.error('Error al guardar documento', error);
+          (error: HttpErrorResponse) => { // Función para manejar el error
+            if (error.status === 200) {
+              Swal.fire({
+                text: 'Documento Guardado Correctamente',
+                icon: 'success',
+              });
+              this.router.navigate(['/']);
+            } else {
+              Swal.fire({
+                text: 'Ocurrió un error al guardar: ' + error,
+                icon: 'error',
+              });
+            }
           }
         );
       }
@@ -124,64 +167,104 @@ export class DocumentoComponent implements OnInit {
     this.documento.anioPublicacion = this.anioSeleccionado;
     this.documentoService.editarDocumento(this.documento).subscribe((documento) => {
       console.log("Se edito el documento")
+      Swal.fire({
+        text: "Se edito correctamente",
+        icon: "success"
+      })
     })
+    this.router.navigate(['/']);
   }
 
-  buscarAutor() {
-    this.autorService.buscarAutores(this.autorBusqueda).subscribe((autores) => {
-      this.autores = autores;
-    });
-    console.log(this.autores)
+  buscarAutor(buscarAutorr: string) {
+    this.mostrarOpcionesA = true;
+    if (buscarAutorr === "") {
+      this.listarAutor(); // Lista todos los autores si el input está vacío
+    } else {
+      this.autorService.buscarAutores(buscarAutorr).subscribe((autores) => {
+        this.autores = autores;
+        this.btnCrearAutor = autores.length === 0; // Muestra el botón si no hay coincidencias
+      });
+    }
   }
 
-  buscarCarrera() {
-    this.carreraService.buscarCarreras(this.carreraBusqueda).subscribe((carreras) => {
-      this.carreras = carreras;
-    });
+  buscarCarrera(buscarCarrerar: string) {
+    this.mostrarOpcionesC = true;
+    if (buscarCarrerar === "") {
+      this.listarCarrera(); // Lista todos los autores si el input está vacío
+    } else {
+      this.autorService.buscarAutores(buscarCarrerar).subscribe((carreras) => {
+        this.carreras = carreras;
+        this.btnCrearCarrera = carreras.length === 0; // Muestra el botón si no hay coincidencias
+      });
+    }
   }
 
-  crearAutor() {
-    this.autorService.crearAutor(this.autorBusqueda).subscribe(
+  crearAutor(autornuevo: string) {
+    this.autorService.crearAutor(autornuevo).subscribe(
       (autor) => {
-        this.autores.push(autor);
-        this.documento.autor = autor;
-        this.errorMessage = ''; // Limpia el mensaje de error si la creación es exitosa
+        this.seleccionarAutor(autor); // Selecciona el autor creado
+        this.listarAutor(); // Actualiza la lista de autores
+        this.errorMessage = '';
       },
       (error) => {
-        this.errorMessage = error; // Asigna el mensaje de error
+        this.errorMessage = error;
         setTimeout(() => {
-          this.errorMessage = ''; // Limpia el mensaje de error después de 10 segundos
-        }, 3000); // 10000 milisegundos = 10 segundos
+          this.errorMessage = '';
+        }, 3000);
       }
     );
   }
 
-  crearCarrera() {
-    this.carreraService.crearCarrera(this.carreraBusqueda).subscribe((carrera) => {
-      this.carreras.push(carrera);
-      this.documento.carrera = carrera;
-    });
+  crearCarrera(carreranuevo: string) {
+    this.carreraService.crearCarrera(carreranuevo).subscribe(
+      (carrera) => {
+        this.seleccionarCarrera(carrera); // Selecciona el autor creado
+        this.listarCarrera(); // Actualiza la lista de autores
+        this.errorMessage = '';
+      },
+      (error) => {
+        this.errorMessage = error;
+        setTimeout(() => {
+          this.errorMessage = '';
+        }, 3000);
+      }
+    );
   }
 
-  seleccionarAutor(autor: Autor) {
-    this.documento.autor = autor;
-    this.autores = []; // Limpia la lista de resultados
-  }
-
-  seleccionarCarrera(carrera: Carrera) {
-    this.documento.carrera = carrera;
-    this.carreras = []; // Limpia la lista de resultados
-  }
-
-  autorExisteEnLista(): boolean {
-    if (this.documento.autor && this.documento.autor.nombre === this.autorBusqueda) {
-      return true;
+  seleccionarAutor(autor: any) {
+    if (autor != null) {
+      this.inputAutorBusqueda.nativeElement.value = autor.nombre;
+      this.documento.autor = autor;
+      this.autores = []; // Limpia la lista de autores
+      this.mostrarOpcionesA = false; // Oculta las opciones
+      this.btnCrearAutor = false; // Asegura que el botón "Crear" esté oculto
     } else {
-      return false;
+      this.mostrarOpcionesA = false;
+      this.inputAutorBusqueda.nativeElement.value = 'Seleccionar Autor';
+      this.listarAutor();
     }
   }
 
-  carreraExisteEnLista(): boolean {
-    return this.documento.carrera && this.documento.carrera.nombre === this.carreraBusqueda;
+  seleccionarCarrera(carrera: any) {
+    if (carrera != null) {
+      this.inputCarreraBusqueda.nativeElement.value = carrera.nombre;
+      this.documento.carrera = carrera;
+      this.carreras = []; // Limpia la lista de autores
+      this.mostrarOpcionesC = false; // Oculta las opciones
+      this.btnCrearCarrera = false; // Asegura que el botón "Crear" esté oculto
+    } else {
+      this.mostrarOpcionesC = false;
+      this.listarCarrera()
+      this.inputCarreraBusqueda.nativeElement.value = 'Seleccionar Carrera';
+    }
   }
+
+  listarCarrera() {
+    this.carreraService.obtenerCarrera().subscribe((carreras) => {
+      this.carreras = carreras;
+      this.btnCrearCarrera = false;
+    });
+  }
+
+
 }

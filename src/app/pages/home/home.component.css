@@ -1,12 +1,12 @@
 .contenedor-scroll {
-    max-height: 300px; /* Ajusta la altura máxima */
-    max-width: 500px;  /* Opcional: ajusta el ancho máximo */
-    overflow-y: auto;  /* Habilita el scroll vertical */
-    overflow-x: auto;  /* Opcional: habilita el scroll horizontal */
-    border: 1px solid #ccc; /* Opcional: añade un borde para identificar el área */
-    padding: 10px;    /* Opcional: añade un margen interno */
+    max-height: 300px;
+    max-width: 500px;
+    overflow-y: auto;
+    overflow-x: auto;
+    border: 1px solid #ccc;
+    padding: 10px;
     margin-bottom: 20px;
-    
+    background-color: white;
 }
 
 
@@ -54,9 +54,7 @@
 }
 
 .filter-item {
-  max-width: 900px;  /* Opcional: ajusta el ancho máximo */
-
-  
+  max-width: 900px;
   position: relative;
   justify-content: space-between;
   margin-bottom: 5px;
@@ -175,6 +173,12 @@
   width: 100%;
 }
 
+.buttonFilter{
+  background-color: white;
+  border: 1px white;
+  font-size: 15px;
+}
+
 .view-document {
   background-color: #76797e;
   color: white;
@@ -200,28 +204,18 @@
 }
 
 .autor-list {
-  overflow-y: auto;  /* Habilita el scroll vertical */
-  overflow-x: auto;  /* Opcional: habilita el scroll horizontal */
+  overflow-y: auto;
+  overflow-x: auto;
   margin-top: 5px;
-  /* Espacio entre el botón y la lista */
   position: absolute;
-  /* Para posicionar la lista debajo */
   top: 100%;
-  /* Coloca la lista debajo del botón */
   left: 0;
-  /* Alinea la lista al inicio del contenedor */
   width: 100%;
-  /* La lista ocupa todo el ancho del contenedor */
   background-color: white;
-  /* O el color de fondo deseado */
   border: 1px solid #ccc;
-  /* Opcional: agrega un borde */
   padding: 10px;
-  /* Espacio interno para la lista */
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  /* Opcional: agrega una sombra */
   z-index: 10;
-  /* Asegura que la lista esté sobre otros elementos */
 }
 
 .autor-item {

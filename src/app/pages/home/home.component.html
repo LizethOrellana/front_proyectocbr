@@ -13,7 +13,7 @@
           <button class="buttonpositivo" (click)="listarAutor()">{{ mostrarAutores ? '-' : '+' }}</button>
           <div *ngIf="mostrarAutores" class="contenedor-scroll">
             <div *ngFor="let autor of autores" class="autor-item" style="justify-content: center;">
-              <button (click)="buscarxAutor(autor)">{{autor.nombre}}</button>
+              <button class="buttonFilter" (click)="buscarxAutor(autor)">{{autor.nombre}}</button>
             </div>
           </div>
         </div>
@@ -22,7 +22,7 @@
           <button class="buttonpositivo" (click)="listarCarreras()">{{ mostrarCarreras ? '-' : '+' }}</button>
           <div *ngIf="mostrarCarreras" class="contenedor-scroll">
             <div *ngFor="let carrera of carreras" class="autor-item" style="justify-content: center;">
-              <button (click)="buscarxCarrera(carrera)">{{carrera.nombre}}</button>
+              <button class="buttonFilter" (click)="buscarxCarrera(carrera)">{{carrera.nombre}}</button>
             </div>
           </div>
         </div>
@@ -31,7 +31,7 @@
           <button class="buttonpositivo" (click)="generarAnios()">{{ mostrarAnios ? '-' : '+' }}</button>
           <div *ngIf="mostrarAnios" class="contenedor-scroll">
             <div *ngFor="let anio of anios" class="autor-item"  style="justify-content: center;">
-              <button (click)="buscarxAnio(anio)">{{anio}}</button>
+              <button class="buttonFilter" (click)="buscarxAnio(anio)">{{anio}}</button>
             </div>
           </div>
         </div>
@@ -55,8 +55,8 @@
           </div>
           <div class="button-container">
             <button class="view-document" (click)="verDocumento(documento)">Ver documento</button>
-            <button class="view-document" (click)="editarDocumento(documento)">Editar</button>
-            <button class="view-document" *ngIf="documento.id_documento"
+            <button class="view-document" *ngIf="!mostrarBotonInicioSesion" (click)="editarDocumento(documento)">Editar</button>
+            <button class="view-document" *ngIf="documento.id_documento && !mostrarBotonInicioSesion"
               (click)="eliminarDocumento(documento.id_documento)">Eliminar</button>
           </div>
         </div>

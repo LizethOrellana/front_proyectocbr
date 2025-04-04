@@ -8,6 +8,9 @@ import { Carrera } from '../../models/Carrera';
 import { CarreraService } from '../../services/carrera.service';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import Swal from 'sweetalert2';
+import { Usuario } from '../../models/Usuario';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-home',
@@ -29,10 +32,14 @@ export class HomeComponent {
   anios: number[] = [];
 
   nombreBusqueda: string = '';
+  usuarioLogueado: Usuario | null = null;
+  mostrarBotonInicioSesion = true;
 
-  constructor(private router: Router, private documentoService: DocumentoService, private autorService: AutorService, private carreraService: CarreraService) { }
+  constructor(private authService: AuthService, private router: Router, private documentoService: DocumentoService, private autorService: AutorService, private carreraService: CarreraService) { }
 
   ngOnInit(): void {
+    this.usuarioLogueado = this.authService.getUsuarioLogueado();
+    this.mostrarBotonInicioSesion = !this.usuarioLogueado;
     this.obtenerDocumentos();
   }
 
@@ -75,8 +82,14 @@ export class HomeComponent {
     console.log("Buscando por Autor")
     console.log(autor)
     this.documentoService.buscarxAutor(autor).subscribe((documentosxAutor) => {
-      console.log(documentosxAutor)
       this.documentos = documentosxAutor;
+      if(this.documentos.length==0){
+        Swal.fire({
+          text: 'No se encontro documentos para este autor',
+          icon: 'warning',
+        })
+        this.obtenerDocumentos();
+      }
     })
   }
 
@@ -84,8 +97,14 @@ export class HomeComponent {
     console.log("Buscando por Carrera")
     console.log(carrera)
     this.documentoService.buscarxCarrera(carrera).subscribe((documentoxCarrera) => {
-      console.log(documentoxCarrera)
       this.documentos = documentoxCarrera;
+      if(this.documentos.length==0){
+        Swal.fire({
+          text: 'No se encontro documentos para esta carrera',
+          icon: 'warning',
+        })
+        this.obtenerDocumentos();
+      }
     })
   }
 
@@ -98,11 +117,15 @@ export class HomeComponent {
   }
 
   buscarxAnio(anio: number) {
-    console.log("Buscando por Años")
-    console.log(anio)
     this.documentoService.buscarxAnio(anio).subscribe((documentoxAnios) => {
-      console.log(documentoxAnios)
       this.documentos = documentoxAnios;
+      if(this.documentos.length==0){
+        Swal.fire({
+          text: 'No se encontro documentos en este año',
+          icon: 'warning',
+        })
+        this.obtenerDocumentos();
+      }
     })
   }
 
@@ -115,25 +138,43 @@ export class HomeComponent {
       this.documentoService.buscarPorNombre(this.nombreBusqueda).subscribe(
         (documentos) => {
           this.documentos = documentos;
+          if(documentos.length==0){
+            Swal.fire({
+              text: 'No se encontro documentos con este nombre',
+              icon: 'warning',
+            })
+            this.obtenerDocumentos();
+          }
         },
         (error) => {
-          console.error('Error al buscar documentos:', error);
+          Swal.fire({
+            text: 'Ocurrió un error al guardar: ' + error,
+            icon: 'error',
+          });
         }
       );
     }
 
   }
 
-  editarDocumento(documento:Documento){
+  editarDocumento(documento: Documento) {
     console.log("Redirigiendo");
     console.log(documento)
-    this.router.navigate(['/crear-documento'], {queryParams:{documento: JSON.stringify(documento)}});
+    this.router.navigate(['/crear-documento']);
+    // , { queryParams: { documento: JSON.stringify(documento) } });
   }
 
   eliminarDocumento(id: number) {
     this.documentoService.deleteDocumento(id).subscribe(() => {
-      console.log("Se elimino");
-      window.location.reload();
+      Swal.fire({
+        text: 'Documento Eliminado Correctamente',
+        icon: 'success',
+        confirmButtonText: 'Aceptar',
+      }).then((result) => {
+        if (result.isConfirmed) {
+          window.location.reload();
+        }
+      });
     });
   }
 }

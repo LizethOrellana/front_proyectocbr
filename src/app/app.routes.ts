@@ -14,6 +14,7 @@ import { provideHttpClient } from '@angular/common/http';
 import { DocumentoComponent } from './pages/documento/documento.component';
 import { IniciarSesionComponent } from './pages/iniciar-sesion/iniciar-sesion.component';
 import { UsuarioComponent } from './pages/usuario/usuario.component';
+import { RecuperarContraseniaComponent } from './pages/recuperar-contrasenia/recuperar-contrasenia.component';
 
 
 export const routes: Routes = [
@@ -21,6 +22,7 @@ export const routes: Routes = [
   { path: 'crear-documento', component: DocumentoComponent },
   { path: 'crear-usuario', component: UsuarioComponent },
   { path: 'iniciar-sesion', component: IniciarSesionComponent },
+  {path:'recuperar-contrsenia', component: RecuperarContraseniaComponent},
   { path: 'header', component: HeaderComponent },
   { path: 'footer', component: FooterComponent },
 ];
