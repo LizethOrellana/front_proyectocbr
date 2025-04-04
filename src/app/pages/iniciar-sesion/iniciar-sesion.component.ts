@@ -4,28 +4,37 @@ import { RecuperarContraseniaComponent } from '../recuperar-contrasenia/recupera
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { UsuarioService } from '../../services/usuario.service';
+import Swal from 'sweetalert2';
+import { AuthService } from '../../services/auth.service';
 
 
 @Component({
   selector: 'app-iniciar-sesion',
-   standalone: true,
-    imports: [FormsModule, CommonModule], 
+  standalone: true,
+  imports: [FormsModule, CommonModule],
   templateUrl: './iniciar-sesion.component.html',
   styleUrl: './iniciar-sesion.component.css'
 })
 export class IniciarSesionComponent {
-  contrasenia:string="";
-  cedula:string="";
+  contrasenia: string = "";
+  cedula: string = "";
   mensajeError: string = '';
 
-  constructor(public dialogRef: MatDialogRef<IniciarSesionComponent>,public dialog: MatDialog, private usuarioService:UsuarioService) { } 
+  constructor(private authService: AuthService, public dialogRef: MatDialogRef<IniciarSesionComponent>, public dialog: MatDialog, private usuarioService: UsuarioService) { }
 
   iniciarSesion() {
     this.usuarioService.iniciarSesion(this.cedula, this.contrasenia).subscribe(
       (usuarioLogueado) => {
-        console.log('Usuario logueado:', usuarioLogueado);
-        localStorage.setItem('usuarioLogueado', JSON.stringify(usuarioLogueado)); 
-        this.dialogRef.close(usuarioLogueado);
+        this.authService.setUsuarioLogueado(usuarioLogueado);
+        Swal.fire({
+          title:"Bienvenido "+usuarioLogueado.nombre,
+          text: "Se inicio sesión correctamente",
+          icon: "success"
+        }).then((result) => {
+          if (result.isConfirmed) {
+            window.location.reload();
+          }
+        });
       },
       (error) => {
         console.error('Error al iniciar sesión:', error);

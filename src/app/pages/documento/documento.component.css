@@ -100,3 +100,39 @@ label {
 .inpdddut[type="submit"]:hover {
   background-color: #76797e;
 }
+
+.autor-select {
+  position: relative;
+  width: 200px; /* Ajusta el ancho según tus necesidades */
+}
+
+.autor-select input {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  background-color: white;
+}
+
+.autor-select .opciones {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  max-height: 150px;
+  overflow-y: auto;
+  border: 1px solid #ccc;
+  background-color: white;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  z-index: 1;
+}
+
+.autor-select .opciones li {
+  padding: 8px;
+  cursor: pointer;
+}
+
+.autor-select .opciones li:hover {
+  background-color: #f0f0f0;
+}

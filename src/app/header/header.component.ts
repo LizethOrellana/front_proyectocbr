@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { IniciarSesionComponent } from '../pages/iniciar-sesion/iniciar-sesion.component';
 import { Usuario } from '../models/Usuario';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-header',
@@ -14,10 +15,16 @@ import { Usuario } from '../models/Usuario';
 })
 export class HeaderComponent implements OnInit{
   usuarioLogueado: Usuario | null = null;
+  mostrarBotonInicioSesion = true;
+
+  constructor(private authService: AuthService, private router: Router, public dialog: MatDialog) {}
 
   ngOnInit() {
-    //this.cargarUsuarioLogueado();
+    this.usuarioLogueado = this.authService.getUsuarioLogueado();
+    this.mostrarBotonInicioSesion = !this.usuarioLogueado;
   }
+
+  
 
   cargarUsuarioLogueado() {
     const usuarioGuardado = localStorage.getItem('usuarioLogueado');
@@ -30,10 +37,12 @@ export class HeaderComponent implements OnInit{
   }
 
   cerrarSesion() {
-    localStorage.removeItem('usuarioLogueado');
+    this.authService.clearUsuarioLogueado();
+    this.usuarioLogueado = null;
+    this.mostrarBotonInicioSesion = true; 
+    window.location.reload();
   }
 
-  constructor(private router: Router, public dialog: MatDialog) { }
   crearDocumento(){
     this.router.navigate(['/crear-documento']);
   }

@@ -12,22 +12,30 @@
     <div *ngIf="errorMessage" class="error-notification">{{ errorMessage }}</div>
 
     <label class="label">Autor</label>
-    <input type="text" placeholder="Autor" [(ngModel)]="autorBusqueda" (input)="buscarAutor()" name="autor"
-        class="input">
-    <ul *ngIf="autores.length > 0 || autorBusqueda" class="opciones">
-        <li *ngFor="let autor of autores" (click)="seleccionarAutor(autor)">{{ autor.nombre }}</li>
-        <button *ngIf="!autorExisteEnLista() && autorBusqueda" type="button" (click)="crearAutor()">Crear "{{
-            autorBusqueda }}"</button>
-    </ul>
-
+    <div class="autor-select">
+        <input type="text" *ngIf="esEditar" [(ngModel)]="autorBusqueda" disabled=true name="autorBusqueda">
+        <input type="text" #inputAutorBusqueda (click)="mostrarOpcionesA = true"
+            (input)="buscarAutor(inputAutorBusqueda.value)" placeholder="Buscar o Crear Autor">
+        <ul *ngIf="mostrarOpcionesA" class="opciones">
+            <li (click)="seleccionarAutor(null)">Seleccionar Autor</li>
+            <li *ngFor="let autor of autores" (click)="seleccionarAutor(autor)">{{ autor.nombre }}</li>
+            <li *ngIf="btnCrearAutor" (click)="crearAutor(inputAutorBusqueda.value)">Crear "{{ inputAutorBusqueda.value
+                }}"</li>
+        </ul>
+    </div>
     <label class="label">Carrera</label>
-    <input type="text" placeholder="Carrera" [(ngModel)]="carreraBusqueda" (input)="buscarCarrera()" name="carrera"
-        class="input">
-    <ul *ngIf="carreras.length > 0 || carreraBusqueda" class="opciones">
-        <li *ngFor="let carrera of carreras" (click)="seleccionarCarrera(carrera)">{{ carrera.nombre }}</li>
-        <button *ngIf="!carreraExisteEnLista() && carreraBusqueda" type="button" (click)="crearCarrera()">Crear "{{
-            carreraBusqueda }}"</button>
-    </ul>
+    <div class="autor-select">
+        <input type="text" *ngIf="esEditar" [(ngModel)]="carreraBusqueda" disabled=true name="carreraBusqueda
+        ">
+        <input type="text" #inputCarreraBusqueda (click)="mostrarOpcionesC = true"
+            (input)="buscarCarrera(inputCarreraBusqueda.value)" placeholder="Buscar o Crear Carrera">
+        <ul *ngIf="mostrarOpcionesC" class="opciones">
+            <li (click)="seleccionarCarrera(null)">Seleccionar Carrera</li>
+            <li *ngFor="let carrera of carreras" (click)="seleccionarCarrera(carrera)">{{ carrera.nombre }}</li>
+            <li *ngIf="btnCrearCarrera" (click)="crearCarrera(inputCarreraBusqueda.value)">Crear "{{ inputCarreraBusqueda.value
+                }}"</li>
+        </ul>
+    </div>
 
     <label class="label">Año de Publicación</label>
     <select [(ngModel)]="anioSeleccionado" name="anioSeleccionado" class="input">
