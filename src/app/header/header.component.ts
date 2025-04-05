@@ -40,7 +40,7 @@ export class HeaderComponent implements OnInit{
     this.authService.clearUsuarioLogueado();
     this.usuarioLogueado = null;
     this.mostrarBotonInicioSesion = true; 
-    window.location.reload();
+    this.router.navigate(['/']);
   }
 
   crearDocumento(){
