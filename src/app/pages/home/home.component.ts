@@ -161,7 +161,6 @@ export class HomeComponent {
     console.log("Redirigiendo");
     console.log(documento)
     this.router.navigate(['/crear-documento']);
-    // , { queryParams: { documento: JSON.stringify(documento) } });
   }
 
   eliminarDocumento(id: number) {

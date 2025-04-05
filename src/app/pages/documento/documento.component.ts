@@ -83,10 +83,10 @@ export class DocumentoComponent implements OnInit {
           console.error('Error al analizar JSON:', error);
         }
       }
-    });
+    });*/
     this.generarAnios();
     this.listarAutor();
-    this.listarCarrera();*/
+    this.listarCarrera();
   }
 
 
@@ -121,6 +121,7 @@ export class DocumentoComponent implements OnInit {
     for (let i = anioActual; i >= 1900; i--) {
       this.anios.push(i);
     }
+    console.log(this.anios)
   }
 
   guardar() {
