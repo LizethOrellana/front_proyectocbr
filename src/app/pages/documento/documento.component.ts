@@ -19,6 +19,7 @@ import Swal from 'sweetalert2'
   styleUrl: './documento.component.css'
 })
 export class DocumentoComponent implements OnInit {
+  documentoId: number = 0;
   documento: Documento = {
     id_documento: undefined,
     titulo: '',
@@ -70,20 +71,23 @@ export class DocumentoComponent implements OnInit {
 
 
   ngOnInit() {
-    /*this.route.queryParams.subscribe((params) => {
-      if (params['documento']) {
-        try {
-          this.documento = JSON.parse(params['documento']);
+    this.route.params.subscribe((params) => {
+      if (params['documentoEditar']) {
+        this.documentoId = JSON.parse(params['documentoEditar']);
+        this.documentoService.buscarxId(this.documentoId).subscribe((documentoConsultado) => {
+          this.documento = documentoConsultado;
           console.log(this.documento)
           this.esEditar = true;
+          console.log(this.documento.anioPublicacion)
+          console.log(this.documento.carrera)
+          console.log(this.documento.autor)
           this.anioSeleccionado = this.documento.anioPublicacion;
           this.carreraBusqueda = this.documento.carrera.nombre;
           this.autorBusqueda = this.documento.autor.nombre;
-        } catch (error) {
-          console.error('Error al analizar JSON:', error);
-        }
+        })
+
       }
-    });*/
+    });
     this.generarAnios();
     this.listarAutor();
     this.listarCarrera();
@@ -121,19 +125,17 @@ export class DocumentoComponent implements OnInit {
     for (let i = anioActual; i >= 1900; i--) {
       this.anios.push(i);
     }
-    console.log(this.anios)
   }
 
   guardar() {
-    if (this.esEditar == true) {
-      this.editar()
-    } else {
+ 
       if (this.selectedFile && this.documento.autor.id_autor && this.documento.carrera.id_carrera) {
         const formData = new FormData();
         formData.append('file', this.selectedFile, this.selectedFile.name);
         formData.append('titulo', this.documento.titulo);
         formData.append('resumen', this.documento.resumen);
         formData.append('anioPublicacion', this.anioSeleccionado.toString());
+        formData.append('documentoId', this.documento.id_documento+"");
         formData.append('autorId', this.documento.autor.id_autor.toString());
         formData.append('carreraId', this.documento.carrera.id_carrera.toString());
         this.http.post('http://localhost:8080/api/documentos/crear', formData).subscribe(
@@ -161,19 +163,7 @@ export class DocumentoComponent implements OnInit {
           }
         );
       }
-    }
-  }
-
-  editar() {
-    this.documento.anioPublicacion = this.anioSeleccionado;
-    this.documentoService.editarDocumento(this.documento).subscribe((documento) => {
-      console.log("Se edito el documento")
-      Swal.fire({
-        text: "Se edito correctamente",
-        icon: "success"
-      })
-    })
-    this.router.navigate(['/']);
+    
   }
 
   buscarAutor(buscarAutorr: string) {

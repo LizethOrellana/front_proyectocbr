@@ -24,7 +24,6 @@ export class IniciarSesionComponent {
   constructor(private router: Router, private authService: AuthService, public dialogRef: MatDialogRef<IniciarSesionComponent>, public dialog: MatDialog, private usuarioService: UsuarioService) { }
 
   iniciarSesion() {
-    console.log(this.cedula+" "+this.contrasenia)
     this.usuarioService.iniciarSesion(this.cedula, this.contrasenia).subscribe(
       (usuarioLogueado) => {
         this.authService.setUsuarioLogueado(usuarioLogueado);

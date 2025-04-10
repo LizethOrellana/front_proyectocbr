@@ -11,6 +11,8 @@ import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
 import { Usuario } from '../../models/Usuario';
 import { AuthService } from '../../services/auth.service';
+import { Injectable, PLATFORM_ID, Inject } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 
 @Component({
   selector: 'app-home',
@@ -35,7 +37,13 @@ export class HomeComponent {
   usuarioLogueado: Usuario | null = null;
   mostrarBotonInicioSesion = true;
 
-  constructor(private authService: AuthService, private router: Router, private documentoService: DocumentoService, private autorService: AutorService, private carreraService: CarreraService) { }
+  constructor(
+    @Inject(PLATFORM_ID) private platformId: Object,
+    private authService: AuthService,
+    private router: Router,
+    private documentoService: DocumentoService,
+    private autorService: AutorService,
+    private carreraService: CarreraService) { }
 
   ngOnInit(): void {
     this.usuarioLogueado = this.authService.getUsuarioLogueado();
@@ -83,7 +91,7 @@ export class HomeComponent {
     console.log(autor)
     this.documentoService.buscarxAutor(autor).subscribe((documentosxAutor) => {
       this.documentos = documentosxAutor;
-      if(this.documentos.length==0){
+      if (this.documentos.length == 0) {
         Swal.fire({
           text: 'No se encontro documentos para este autor',
           icon: 'warning',
@@ -98,7 +106,7 @@ export class HomeComponent {
     console.log(carrera)
     this.documentoService.buscarxCarrera(carrera).subscribe((documentoxCarrera) => {
       this.documentos = documentoxCarrera;
-      if(this.documentos.length==0){
+      if (this.documentos.length == 0) {
         Swal.fire({
           text: 'No se encontro documentos para esta carrera',
           icon: 'warning',
@@ -119,7 +127,7 @@ export class HomeComponent {
   buscarxAnio(anio: number) {
     this.documentoService.buscarxAnio(anio).subscribe((documentoxAnios) => {
       this.documentos = documentoxAnios;
-      if(this.documentos.length==0){
+      if (this.documentos.length == 0) {
         Swal.fire({
           text: 'No se encontro documentos en este año',
           icon: 'warning',
@@ -138,7 +146,7 @@ export class HomeComponent {
       this.documentoService.buscarPorNombre(this.nombreBusqueda).subscribe(
         (documentos) => {
           this.documentos = documentos;
-          if(documentos.length==0){
+          if (documentos.length == 0) {
             Swal.fire({
               text: 'No se encontro documentos con este nombre',
               icon: 'warning',
@@ -158,10 +166,8 @@ export class HomeComponent {
   }
 
   editarDocumento(documento: Documento) {
-    console.log("Redirigiendo");
-    console.log(documento)
-    this.router.navigate(['/crear-documento']);
-  }
+    this.router.navigate(['/crear-documento', { documentoEditar: documento.id_documento }]);
+}
 
   eliminarDocumento(id: number) {
     this.documentoService.deleteDocumento(id).subscribe(() => {

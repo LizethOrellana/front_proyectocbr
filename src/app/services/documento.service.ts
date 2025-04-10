@@ -21,12 +21,12 @@ private URL_DOCUMENTO: string;
     return this.http.get<[Documento]>(`${this.URL_DOCUMENTO}`);
   }
 
-  editarDocumento(documento: any): Observable<string> {
-    return this.http.put<string>(`${this.URL_DOCUMENTO}/${documento.id_documento}`, documento);
+  editarDocumento(Documento: any): Observable<any> {
+    return this.http.post<any>(`${this.URL_DOCUMENTO}/crear`, Documento);
   }
 
   registrarDocumento(Documento: any): Observable<any> {
-    return this.http.post<any>(`${this.URL_DOCUMENTO}/crear`, Documento);
+    return this.http.post<any>(`${this.URL_DOCUMENTO}/editar`, Documento);
   }
 
   buscarxAutor(autor: Autor): Observable<Documento[]> { // Cambiar el tipo de retorno a Documento[]
@@ -45,6 +45,11 @@ private URL_DOCUMENTO: string;
 
   buscarPorNombre(nombre: string): Observable<Documento[]> {
     return this.http.get<Documento[]>(`${this.URL_DOCUMENTO}/buscarPorNombre?nombre=${nombre}`);
+  }
+
+  buscarxId(id: number): Observable<Documento> { // Cambiar el tipo de retorno a Documento[]
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    return this.http.get<Documento>(`${this.URL_DOCUMENTO}/${id}`,  { headers: headers }); // Usar http.post
   }
 
   deleteDocumento(id: number): Observable<void> {
