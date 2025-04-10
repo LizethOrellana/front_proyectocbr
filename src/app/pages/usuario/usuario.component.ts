@@ -27,7 +27,7 @@ export class UsuarioComponent implements OnInit {
   };
   repcontrasenia: string = "";
 
-  maxUsuarios: number = 5;
+  maxUsuarios: number = 6;
 
   esEditar: Boolean = false;
 
@@ -42,6 +42,16 @@ export class UsuarioComponent implements OnInit {
       this.usuarios = usuarios;
     });
   }
+
+  soloNumeros(event: any) {
+    const charCode = event.which ? event.which : event.keyCode;
+    if (charCode < 48 || charCode > 57) {
+      event.preventDefault();
+      return false;
+    }
+    return true;
+  }
+  
 
   vaciarCampos() {
     this.nuevoUsuario = {
@@ -62,17 +72,29 @@ export class UsuarioComponent implements OnInit {
       if (!this.nuevoUsuario.cedula || !this.nuevoUsuario.nombre ||
         !this.nuevoUsuario.primera_pregunta || !this.nuevoUsuario.segunda_pregunta ||
         !this.nuevoUsuario.contrasenia || !this.repcontrasenia) {
-        alert("Por favor, complete todos los campos.");
+          Swal.fire({
+            text: 'Por favor complete los campos',
+            icon: 'warning',
+            confirmButtonText: 'Aceptar',
+          })
         return;
       }
 
       if (this.repcontrasenia !== this.nuevoUsuario.contrasenia) {
-        alert("Las contraseñas no coinciden.");
+        Swal.fire({
+          text: 'Las contraseñas no coinciden',
+          icon: 'warning',
+          confirmButtonText: 'Aceptar',
+        })
         return;
       }
 
       if (this.usuarios.length >= this.maxUsuarios) {
-        alert(`No se pueden crear más de ${this.maxUsuarios} usuarios.`);
+        Swal.fire({
+          html: 'No se pueden crear más de '+this.maxUsuarios+' usuarios. <br> Hable Con Soporte Técnico en caso de que decee crear un nuevo usuario',
+          icon: 'warning',
+          confirmButtonText: 'Aceptar',
+        })
         return;
       }
 

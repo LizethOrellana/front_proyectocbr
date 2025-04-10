@@ -6,6 +6,7 @@ import { FormsModule } from '@angular/forms';
 import { UsuarioService } from '../../services/usuario.service';
 import Swal from 'sweetalert2';
 import { AuthService } from '../../services/auth.service';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -20,9 +21,10 @@ export class IniciarSesionComponent {
   cedula: string = "";
   mensajeError: string = '';
 
-  constructor(private authService: AuthService, public dialogRef: MatDialogRef<IniciarSesionComponent>, public dialog: MatDialog, private usuarioService: UsuarioService) { }
+  constructor(private router: Router, private authService: AuthService, public dialogRef: MatDialogRef<IniciarSesionComponent>, public dialog: MatDialog, private usuarioService: UsuarioService) { }
 
   iniciarSesion() {
+    console.log(this.cedula+" "+this.contrasenia)
     this.usuarioService.iniciarSesion(this.cedula, this.contrasenia).subscribe(
       (usuarioLogueado) => {
         this.authService.setUsuarioLogueado(usuarioLogueado);
@@ -32,12 +34,18 @@ export class IniciarSesionComponent {
           icon: "success"
         }).then((result) => {
           if (result.isConfirmed) {
-            window.location.reload();
+            this.router.navigate(['/']);
+            setTimeout(() => {
+              window.location.reload();
+            }, 2000);
           }
         });
       },
       (error) => {
-        console.error('Error al iniciar sesión:', error);
+        Swal.fire({
+          title:"No se pudo iniciar sesión",
+          icon: "error"
+        })
         this.mensajeError = error.error;
       }
     );
@@ -45,6 +53,15 @@ export class IniciarSesionComponent {
 
   cerrarModal() {
     this.dialogRef.close();
+  }
+
+  soloNumeros(event: any) {
+    const charCode = event.which ? event.which : event.keyCode;
+    if (charCode < 48 || charCode > 57) {
+      event.preventDefault();
+      return false;
+    }
+    return true;
   }
 
   abrirModalForgotPassword() {

@@ -7,7 +7,7 @@
   <nav class="menu" style="margin-right: auto;">
     <ul>
       <li><button class="buttonitem" *ngIf="!mostrarBotonInicioSesion" (click)="crearDocumento()">Crear Documento</button></li>
-      <li><button class="buttonitem" *ngIf="!mostrarBotonInicioSesion" (click)="crearUsuario()">Crear Usuario</button></li>
+      <li><button class="buttonitem" *ngIf="!mostrarBotonInicioSesion && esAdministrador" (click)="crearUsuario()">Crear Usuario</button></li>
     </ul>
   </nav>
   <div class="header-icons">

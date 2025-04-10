@@ -6,9 +6,14 @@
         <div class="form-container">
             <form (ngSubmit)="crearUsuario()">
                 <div class="form-group">
-                    <label for="cedula">Cédula:</label>
-                    <input type="number" id="cedula" name="cedula" placeholder="Cedula"
-                        [(ngModel)]="nuevoUsuario.cedula" maxlength="10" pattern="[0-9]{10}" required  [disabled]="esEditar ? true : false" />
+                    <label type="text" for="cedula">Cédula:</label>
+                    <input id="cedula" name="cedula" placeholder="Cedula"
+       [(ngModel)]="nuevoUsuario.cedula"
+       maxlength="10"
+       pattern="[0-9]{10}"
+       required
+       [disabled]="esEditar ? true : false"
+       (keypress)="soloNumeros($event)" />
                 </div>
                 <div class="form-group">
                     <label for="nombre">Nombre:</label>
@@ -38,7 +43,7 @@
                     <input type="password" id="contrasenia" name="contrasenia" placeholder="Contraseña"
                         [(ngModel)]="repcontrasenia" required>
                 </div>
-                <button type="submit">Crear Usuario</button>
+                <button type="submit">Guardar</button>
 
             </form>
         </div>
