@@ -7,6 +7,7 @@ import { Usuario } from '../models/Usuario';
 import { AuthService } from '../services/auth.service';
 import { isPlatformBrowser } from '@angular/common';
 import { Inject, PLATFORM_ID } from '@angular/core';
+import { RecuperarContraseniaComponent } from '../pages/recuperar-contrasenia/recuperar-contrasenia.component';
 
 @Component({
   selector: 'app-header',
@@ -66,4 +67,6 @@ export class HeaderComponent implements OnInit {
   abrirModalInicioSesion() {
     this.dialog.open(IniciarSesionComponent);
   }
+
+  
 }
