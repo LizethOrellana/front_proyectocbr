@@ -94,11 +94,8 @@ export class RecuperarContraseniaComponent {
       alert('Por favor, completa todos los campos.');
       return;
     }
-
-    console.log(this.cedula1+" "+this.mascota+" "+this.ciudad)
         this.usuarioService.recuperarclave(this.cedula1, this.mascota,this.ciudad).subscribe(
           (usuariorecuperado) => {
-            alert(usuariorecuperado)
             Swal.fire({
               title:"Bienvenido de nuevo tus credenciales son Cedula:"+usuariorecuperado.cedula+"Contraseña:"+usuariorecuperado.contrasenia,
               text: "Se recupero correctamente",
