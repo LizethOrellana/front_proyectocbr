@@ -37,4 +37,12 @@ export class UsuarioService {
     return this.http.put(`${this.URL_USUARIO}/editarusuario/${cedula}`, usuario);
   }
 
+  recuperarclave(cedula: string, mascota: string, ciudad: string): Observable<Usuario> {
+    const params = new HttpParams()
+      .set('cedula', cedula)
+      .set('mascota', mascota)
+      .set('ciudad',ciudad);
+    return this.http.post<Usuario>(`${this.URL_USUARIO}/buscarusuario`, params);
+  }
+
 }

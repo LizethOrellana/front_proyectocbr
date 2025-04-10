@@ -67,4 +67,5 @@ export class IniciarSesionComponent {
     console.log("Abrir olvido contraseña")
     this.dialog.open(RecuperarContraseniaComponent);
   }
+
 }

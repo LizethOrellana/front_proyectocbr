@@ -1,4 +1,4 @@
-<div class="forgot-password-container">
+<!--<div class="forgot-password-container">
     <button class="close-button" (click)="cerrarModal()">×</button>
     <h4>Iniciar sesión</h4>
     <div class="form-group">
@@ -14,4 +14,23 @@
         <input type="text" [(ngModel)]="respuesta2" name="respuesta2">
     </div>
     <p><a (click)="verificarRespuestas()">¿Has olvidado tu contraseña?</a></p>
+</div>-->
+
+
+
+<!-- From Uiverse.io by alexruix -->
+<div class="form-box">
+    <form class="form" (ngSubmit)="verificarDatos()">
+        <span class="title">Recuperar Contraseña</span>
+        <span class="subtitle" style="color: rgb(255, 0, 0);">Responde las siguientes preguntas de seguridad para poder recuperar tu cuenta.</span>
+        <div class="form-container">
+            <input type="text" class="input" placeholder="Número de cédula" id="cedula1" name="cedula1" [(ngModel)]="cedula1">
+            <input type="text" class="input" placeholder="¿Nombre de su primera mascota?" id="mascota" name="mascota"  [(ngModel)]="mascota">
+            <input type="text" class="input" placeholder="¿Ciudad de nacimiento?" name="ciudad" id="ciudad"  [(ngModel)]="ciudad">
+        </div>
+        <button>Verificar</button>
+    </form>
+    <div class="form-section">
+        <p>Contacta a un Administrador <a href="">Aqui</a> </p>
+    </div>
 </div>
