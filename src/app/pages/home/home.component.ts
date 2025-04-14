@@ -59,7 +59,6 @@ export class HomeComponent {
 
   verDocumento(documento: Documento) {
     if (documento.id_documento) {
-      console.log("ID DOCUMENTO: " + documento.id_documento)
       const url = `http://localhost:8080/api/documentos/verdocumento/${documento.id_documento}`; // Reemplaza "tu-backend" con la URL de tu backend
       window.open(url, '_blank'); // Abre el archivo en una nueva pestaña
     } else {
@@ -68,27 +67,21 @@ export class HomeComponent {
   }
 
   listarAutor() {
-    console.log("Listando Autores")
     this.autorService.obtenerAutores().subscribe((autores) => {
       this.autores = autores;
       this.mostrarAutores = !this.mostrarAutores;
-      console.log(autores)
     });
   }
 
   listarCarreras() {
-    console.log("Listando Carreras")
     this.carreraService.obtenerCarrera().subscribe((carreras) => {
       this.carreras = carreras;
       this.mostrarCarreras = !this.mostrarCarreras;
-      console.log(carreras)
     });
   }
 
 
   buscarxAutor(autor: Autor) {
-    console.log("Buscando por Autor")
-    console.log(autor)
     this.documentoService.buscarxAutor(autor).subscribe((documentosxAutor) => {
       this.documentos = documentosxAutor;
       if (this.documentos.length == 0) {
@@ -102,8 +95,6 @@ export class HomeComponent {
   }
 
   buscarxCarrera(carrera: Carrera) {
-    console.log("Buscando por Carrera")
-    console.log(carrera)
     this.documentoService.buscarxCarrera(carrera).subscribe((documentoxCarrera) => {
       this.documentos = documentoxCarrera;
       if (this.documentos.length == 0) {
@@ -139,10 +130,8 @@ export class HomeComponent {
 
   buscarDocumentos() {
     if (this.nombreBusqueda == "") {
-      console.log("Se cargan todos los dcumentos")
       this.obtenerDocumentos();
     } else {
-      console.log("Documento a buscar:" + this.nombreBusqueda)
       this.documentoService.buscarPorNombre(this.nombreBusqueda).subscribe(
         (documentos) => {
           this.documentos = documentos;

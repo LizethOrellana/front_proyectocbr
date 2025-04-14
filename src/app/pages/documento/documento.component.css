@@ -76,6 +76,7 @@ label {
   font-weight: bold;
   display: block;
   margin-bottom: 10px;
+  margin-top: 1%;
 }
 
 .inpdddut[type="file"] {
@@ -103,7 +104,7 @@ label {
 
 .autor-select {
   position: relative;
-  width: 200px; /* Ajusta el ancho según tus necesidades */
+  width: 95%;
 }
 
 .autor-select input {
@@ -135,4 +136,8 @@ label {
 
 .autor-select .opciones li:hover {
   background-color: #f0f0f0;
+}
+
+.piepag{
+  height: 10%;
 }

@@ -36,8 +36,6 @@ export class HeaderComponent implements OnInit {
       const usuarioGuardado = localStorage.getItem('usuarioLogueado');
       if (usuarioGuardado) {
         this.usuarioLogueado = JSON.parse(usuarioGuardado);
-        console.log('Usuario recuperado del caché:', this.usuarioLogueado);
-        console.log(this.usuarioLogueado)
         if (this.usuarioLogueado?.rol == "ADMINISTRADOR") {
           this.esAdministrador = true;
         }

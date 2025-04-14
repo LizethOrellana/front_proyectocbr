@@ -169,8 +169,8 @@ export class UsuarioComponent implements OnInit {
   }
 
   seleccionarEditar(usuario: Usuario) {
-    console.log('Editar usuario:', usuario);
     this.nuevoUsuario = usuario;
+    this.repcontrasenia=usuario.contrasenia
     this.esEditar = true;
   }
 

@@ -1,7 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { GeneralService } from './general.service';
-import { Observable } from 'rxjs';
+import { catchError, Observable } from 'rxjs';
 import { Usuario } from '../models/Usuario';
 
 @Injectable({
@@ -43,6 +43,20 @@ export class UsuarioService {
       .set('mascota', mascota)
       .set('ciudad',ciudad);
     return this.http.post<Usuario>(`${this.URL_USUARIO}/buscarusuario`, params);
+  }
+
+  obtenerUsuarioPorCedula(cedula: string): Observable<any> {
+    return this.http.get<any>(`${this.URL_USUARIO}/${cedula}`);
+  }
+
+  verificarPreguntasSeguridad(cedula: string, mascota: string, ciudad: string): Observable<any> {
+    const body = { primeraPregunta: mascota, segundaPregunta: ciudad };
+    return this.http.post<any>(`${this.URL_USUARIO}/verificarPreguntas/${cedula}`, body);
+  }
+
+  cambiarContrasenia(cedula: string, nuevaContrasenia: string): Observable<any> {
+   const body = { nuevaContrasenia: nuevaContrasenia};
+    return this.http.put<any>(`${this.URL_USUARIO}/cambiarContrasenia/${cedula}`, body);
   }
 
 }

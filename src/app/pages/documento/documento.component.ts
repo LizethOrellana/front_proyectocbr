@@ -76,11 +76,7 @@ export class DocumentoComponent implements OnInit {
         this.documentoId = JSON.parse(params['documentoEditar']);
         this.documentoService.buscarxId(this.documentoId).subscribe((documentoConsultado) => {
           this.documento = documentoConsultado;
-          console.log(this.documento)
           this.esEditar = true;
-          console.log(this.documento.anioPublicacion)
-          console.log(this.documento.carrera)
-          console.log(this.documento.autor)
           this.anioSeleccionado = this.documento.anioPublicacion;
           this.carreraBusqueda = this.documento.carrera.nombre;
           this.autorBusqueda = this.documento.autor.nombre;
@@ -110,7 +106,6 @@ export class DocumentoComponent implements OnInit {
 
   onFileSelected(event: any) {
     this.selectedFile = event.target.files[0];
-    console.log(this.selectedFile)
   }
 
   listarAutor() {
@@ -139,7 +134,7 @@ export class DocumentoComponent implements OnInit {
         formData.append('autorId', this.documento.autor.id_autor.toString());
         formData.append('carreraId', this.documento.carrera.id_carrera.toString());
         this.http.post('http://localhost:8080/api/documentos/crear', formData).subscribe(
-          (response: any) => { // Función para manejar la respuesta exitosa
+          (response: any) => {
             Swal.fire({
               text: 'Documento Guardado Correctamente',
               icon: 'success',
@@ -147,7 +142,7 @@ export class DocumentoComponent implements OnInit {
             console.log('Documento guardado');
             this.router.navigate(['/']);
           },
-          (error: HttpErrorResponse) => { // Función para manejar el error
+          (error: HttpErrorResponse) => {
             if (error.status === 200) {
               Swal.fire({
                 text: 'Documento Guardado Correctamente',

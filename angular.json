@@ -25,6 +25,11 @@
                   "glob": "logo.jpg",
                   "input": "src",
                   "output": "/"
+              },
+              {
+                "glob": "imagen_home.jpg",
+                  "input": "src",
+                  "output": "/"
               }
             ],
             "styles": [

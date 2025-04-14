@@ -64,7 +64,6 @@ export class IniciarSesionComponent {
   }
 
   abrirModalForgotPassword() {
-    console.log("Abrir olvido contraseña")
     this.dialog.open(RecuperarContraseniaComponent);
   }
 

@@ -1,36 +1,42 @@
-<!--<div class="forgot-password-container">
-    <button class="close-button" (click)="cerrarModal()">×</button>
-    <h4>Iniciar sesión</h4>
-    <div class="form-group">
-        <label for="cedula">Cédula</label>
-        <input type="number" id="cedula" name="cedula" [(ngModel)]="cedula">
-    </div>
-    <div class="form-group">
-        <label [(ngModel)]="pregunta1" name="pregunta1"></label>
-        <input type="text" [(ngModel)]="respuesta1" name="respuesta1">
-    </div>
-    <div class="form-group">
-        <label [(ngModel)]="pregunta2" name="pregunta2"></label>
-        <input type="text" [(ngModel)]="respuesta2" name="respuesta2">
-    </div>
-    <p><a (click)="verificarRespuestas()">¿Has olvidado tu contraseña?</a></p>
-</div>-->
-
-
-
-<!-- From Uiverse.io by alexruix -->
 <div class="form-box">
-    <form class="form" (ngSubmit)="verificarDatos()">
+    <form class="form" (ngSubmit)="buscarUsuario()" *ngIf="mostrarCedula==true">
         <span class="title">Recuperar Contraseña</span>
-        <span class="subtitle" style="color: rgb(255, 0, 0);">Responde las siguientes preguntas de seguridad para poder recuperar tu cuenta.</span>
+        <span class="subtitle" style="color: rgb(255, 0, 0);">
+            Ingresa tu número de cédula para recuperar tu cuenta.
+        </span>
         <div class="form-container">
-            <input type="text" class="input" placeholder="Número de cédula" id="cedula1" name="cedula1" [(ngModel)]="cedula1">
-            <input type="text" class="input" placeholder="¿Nombre de su primera mascota?" id="mascota" name="mascota"  [(ngModel)]="mascota">
-            <input type="text" class="input" placeholder="¿Ciudad de nacimiento?" name="ciudad" id="ciudad"  [(ngModel)]="ciudad">
+            <input type="text" class="input" placeholder="Número de cédula" id="cedula1" name="cedula1"
+                [(ngModel)]="cedula" (keypress)="soloNumeros($event)" />
         </div>
-        <button>Verificar</button>
+        <button type="submit">Buscar la cédula</button>
     </form>
-    <div class="form-section">
-        <p>Contacta a un Administrador <a href="">Aqui</a> </p>
-    </div>
+
+    <form class="form" (ngSubmit)="verificarPreguntas()" *ngIf="mostrarPreguntas && !mostrarContrasenaInput">
+        <span class="title">Verificar Preguntas de Seguridad</span>
+        <span class="subtitle" style="color: rgb(255, 0, 0);">
+            Responde las siguientes preguntas de seguridad para recuperar tu cuenta.
+        </span>
+        <div class="form-container">
+            <input type="text" class="input" placeholder="{{ pregunta1 }}" id="mascota" name="mascota"
+                [(ngModel)]="mascota" />
+            <input type="text" class="input" placeholder="{{ pregunta2 }}" name="ciudad" id="ciudad"
+                [(ngModel)]="ciudad" />
+        </div>
+        <button type="submit">Verificar</button>
+    </form>
+
+    <form class="form" (ngSubmit)="cambiarContrasenia()" *ngIf="mostrarContrasenaInput">
+        <span class="title">Cambiar Contraseña</span>
+        <span class="subtitle" style="color: rgb(255, 0, 0);">
+            Ingresa tu nueva contraseña.
+        </span>
+        <div class="form-container">
+            <input type="password" class="input" placeholder="Nueva contraseña" id="nuevaContrasena"
+                name="nuevaContrasena" [(ngModel)]="nuevaContrasena" />
+            <input type="password" class="input" placeholder="Confirmar contraseña" name="confirmarContrasena"
+                id="confirmarContrasena" [(ngModel)]="confirmarContrasena" />
+        </div>
+        <button type="submit">Cambiar Contraseña</button>
+    </form>
+
 </div>
