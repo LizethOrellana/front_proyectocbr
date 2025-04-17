@@ -7,7 +7,7 @@ WORKDIR /app
 RUN apt-get update && apt-get install -y python3 make g++ && rm -rf /var/lib/apt/lists/*
 
 COPY package*.json ./
-RUN npm install --legacy-peer-deps
+RUN npm ci --legacy-peer-deps  # Usamos npm ci para instalar dependencias desde el lockfile
 
 COPY . .
 RUN npm run build --configuration=production
@@ -15,7 +15,6 @@ RUN npm run build --configuration=production
 # Etapa 2: nginx para servir Angular
 FROM nginx:alpine
 
-COPY --from=build-stage /app/dist/<nombre-de-tu-app> /usr/share/nginx/html
+COPY --from=build-stage /app/dist/front_proyectocbr/browser/ /usr/share/nginx/html
 
-# Reemplaza el default.conf si lo estás personalizando
-# COPY nginx.conf /etc/nginx/conf.d/default.conf
+COPY nginx.conf /etc/nginx/nginx.conf
