@@ -13,6 +13,7 @@ import { Usuario } from '../../models/Usuario';
 import { AuthService } from '../../services/auth.service';
 import { Injectable, PLATFORM_ID, Inject } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-home',
@@ -158,17 +159,48 @@ export class HomeComponent {
     this.router.navigate(['/crear-documento', { documentoEditar: documento.id_documento }]);
 }
 
-  eliminarDocumento(id: number) {
-    this.documentoService.deleteDocumento(id).subscribe(() => {
-      Swal.fire({
-        text: 'Documento Eliminado Correctamente',
-        icon: 'success',
-        confirmButtonText: 'Aceptar',
-      }).then((result) => {
-        if (result.isConfirmed) {
-          window.location.reload();
-        }
+eliminarDocumento(id: number) {
+  Swal.fire({
+    title: '¿Estás seguro de eliminar?',
+    text: 'Esta acción no se puede deshacer.',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Sí, eliminar',
+    cancelButtonText: 'Cancelar',
+  }).then((result) => {
+    if (result.isConfirmed) {
+      this.documentoService.deleteDocumento(id).subscribe({
+        next: (response: any) => {
+          Swal.fire({
+            text: 'Documento Eliminado Correctamente',
+            icon: 'success',
+            confirmButtonText: 'Aceptar',
+          }).then((result) => {
+            if (result.isConfirmed) {
+              window.location.reload();
+            }
+          });
+        },
+        error: (error: HttpErrorResponse) => {
+          if (error.status === 200) {
+            Swal.fire({
+              text: 'Documento Eliminado Correctamente',
+              icon: 'success',
+              confirmButtonText: 'Aceptar',
+            }).then((result) => {
+              if (result.isConfirmed) {
+                window.location.reload();
+              }
+            });
+          } else {
+            Swal.fire({
+              text: 'Ocurrió un error al eliminar: ' + error.error,
+              icon: 'error',
+            });
+          }
+        },
       });
-    });
-  }
+    }
+  });
+}
 }

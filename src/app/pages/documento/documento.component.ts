@@ -48,6 +48,7 @@ export class DocumentoComponent implements OnInit {
   errorMessage: string = '';
   selectedFile: File | null = null;
   esEditar: Boolean = false;
+  mantenerArchivo: boolean = true;
 
   @ViewChild('inputAutorBusqueda') inputAutorBusqueda!: ElementRef;
   autorSeleccionado: Autor = {
@@ -82,6 +83,8 @@ export class DocumentoComponent implements OnInit {
           this.autorBusqueda = this.documento.autor.nombre;
         })
 
+      } else {
+        this.mantenerArchivo = false;
       }
     });
     this.generarAnios();
@@ -108,44 +111,53 @@ export class DocumentoComponent implements OnInit {
   }
 
   guardar() {
- 
-      if (this.selectedFile && this.documento.autor.id_autor && this.documento.carrera.id_carrera) {
-        console.log("Guardando")
-        const formData = new FormData();
-        formData.append('file', this.selectedFile, this.selectedFile.name);
-        formData.append('titulo', this.documento.titulo);
-        formData.append('resumen', this.documento.resumen);
-        formData.append('anioPublicacion', this.anioSeleccionado.toString());
-        formData.append('documentoId', this.documento.id_documento+"");
-        formData.append('autorId', this.documento.autor.id_autor.toString());
-        formData.append('carreraId', this.documento.carrera.id_carrera.toString());
-        console.log(formData)
-        this.http.post('http://localhost:8080/api/documentos/crear', formData).subscribe(
-          (response: any) => {
+
+    if (this.documento.autor.id_autor && this.documento.carrera.id_carrera) {
+      console.log("Guardando")
+      const formData = new FormData();
+      if (this.mantenerArchivo == false) {
+        if (this.selectedFile) {
+          
+          formData.append('file', this.selectedFile, this.selectedFile.name);
+        }
+      } else {
+        if (this.documento.contenido) {
+          formData.append('contenido', this.documento.contenido);
+        }
+      }
+      formData.append('documentoId', this.documento.id_documento + "");
+      formData.append('titulo', this.documento.titulo);
+      formData.append('resumen', this.documento.resumen);
+      formData.append('anioPublicacion', this.anioSeleccionado.toString());
+      formData.append('autorId', this.documento.autor.id_autor.toString());
+      formData.append('carreraId', this.documento.carrera.id_carrera.toString());
+      console.log(formData)
+      this.http.post('http://localhost:8080/api/documentos/crear', formData).subscribe(
+        (response: any) => {
+          Swal.fire({
+            text: 'Documento Guardado Correctamente',
+            icon: 'success',
+          });
+          console.log('Documento guardado');
+          this.router.navigate(['/']);
+        },
+        (error: HttpErrorResponse) => {
+          if (error.status === 200) {
             Swal.fire({
               text: 'Documento Guardado Correctamente',
               icon: 'success',
             });
-            console.log('Documento guardado');
             this.router.navigate(['/']);
-          },
-          (error: HttpErrorResponse) => {
-            if (error.status === 200) {
-              Swal.fire({
-                text: 'Documento Guardado Correctamente',
-                icon: 'success',
-              });
-              this.router.navigate(['/']);
-            } else {
-              Swal.fire({
-                text: 'Ocurrió un error al guardar: ' + error,
-                icon: 'error',
-              });
-            }
+          } else {
+            Swal.fire({
+              text: 'Ocurrió un error al guardar: ' + error,
+              icon: 'error',
+            });
           }
-        );
-      }
-    
+        }
+      );
+    }
+
   }
 
   buscarAutor(buscarAutorr: string) {

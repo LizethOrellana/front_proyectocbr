@@ -1,7 +1,12 @@
 <form class="form">
     <span class="title">Registrar Documento</span>
-    <label for="arquivo">Eliga el documento:</label>
-    <input accept=".pdf, .docx" class="inpdddut" name="arquivo" id="arquivo" type="file"
+    <div *ngIf="esEditar==true" style="display: flex;">
+        <input type="checkbox" id="mantenerArchivo" name="mantenerArchivo" [(ngModel)]="mantenerArchivo">
+        <label for="mantenerArchivo">Mantener archivo actual</label>
+    </div>
+
+    <label *ngIf="mantenerArchivo==false" for="arquivo">Eliga el documento:</label>
+    <input *ngIf="mantenerArchivo==false" accept=".pdf" class="inpdddut" name="arquivo" id="arquivo" type="file"
         (change)="onFileSelected($event)">
 
     <label class="label">Título</label>

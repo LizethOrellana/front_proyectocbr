@@ -67,7 +67,7 @@
                         <td>{{ usuario.rol }}</td>
                         <td>
                             <button class="buttontable" (click)="seleccionarEditar(usuario)">Editar</button>
-                            <button class="buttontable" (click)="eliminarUsuario(usuario.cedula)">Eliminar</button>
+                        <button class="buttontable" *ngIf="usuario.rol != 'ADMINISTRADOR'" (click)="eliminarUsuario(usuario.cedula)">Eliminar</button>
                         </td>
                     </tr>
                 </tbody>
