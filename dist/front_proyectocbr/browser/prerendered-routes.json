@@ -1,0 +1,11 @@
+{
+  "routes": [
+    "/",
+    "/crear-documento",
+    "/crear-usuario",
+    "/footer",
+    "/header",
+    "/iniciar-sesion",
+    "/recuperar-contrsenia"
+  ]
+}
