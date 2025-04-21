@@ -22,14 +22,14 @@
             "tsConfig": "tsconfig.app.json",
             "assets": [
               {
-                  "glob": "logo.jpg",
-                  "input": "src",
-                  "output": "/"
+                "glob": "logo.jpg",
+                "input": "src",
+                "output": "/"
               },
               {
                 "glob": "imagen_home.jpg",
-                  "input": "src",
-                  "output": "/"
+                "input": "src",
+                "output": "/"
               }
             ],
             "styles": [
@@ -39,8 +39,15 @@
             "scripts": [],
             "server": "src/main.server.ts",
             "prerender": {
-              "routesFile": "prerender-urls.txt",
-              "discoverRoutes": false
+              "routes": [
+                "/",
+                "/crear-usuario",
+                "/crear-documento",
+                "/iniciar-sesion",
+                "/recuperar-contrsenia",
+                "/header",
+                "/footer"
+              ]
             },
             "ssr": {
               "entry": "server.ts"
