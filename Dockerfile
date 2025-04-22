@@ -19,7 +19,7 @@ RUN npm run build -- --configuration production
 
 # Stage 2: Serve the built application with a lightweight web server (e.g., nginx)
 FROM nginx:alpine
-COPY --from=build-stage /app/dist/front_proyectocbr/browser/ /usr/share/nginx/html
+COPY --from=build-env /app/dist/front_proyectocbr/browser/ /usr/share/nginx/html
 
 # Optionally, you can copy a custom nginx configuration file
 # COPY ./nginx.conf /etc/nginx/conf.d/default.conf
