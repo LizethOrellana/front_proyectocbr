@@ -60,7 +60,7 @@ export class HomeComponent {
 
   verDocumento(documento: Documento) {
     if (documento.id_documento) {
-      const url = `http://localhost:8080/api/documentos/verdocumento/${documento.id_documento}`; // Reemplaza "tu-backend" con la URL de tu backend
+      const url = `http://ec2-18-218-153-234.us-east-2.compute.amazonaws.com:8080/api/documentos/verdocumento/${documento.id_documento}`; // Reemplaza "tu-backend" con la URL de tu backend
       window.open(url, '_blank'); // Abre el archivo en una nueva pestaña
     } else {
       console.error('El documento no tiene un ID válido.');
