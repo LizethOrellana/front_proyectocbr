@@ -60,7 +60,7 @@ export class HomeComponent {
 
   verDocumento(documento: Documento) {
     if (documento.id_documento) {
-      const url = `http://ec2-18-218-153-234.us-east-2.compute.amazonaws.com:8080/api/documentos/verdocumento/${documento.id_documento}`; // Reemplaza "tu-backend" con la URL de tu backend
+      const url = `http://82.29.155.55:8080/api/documentos/verdocumento/${documento.id_documento}`; // Reemplaza "tu-backend" con la URL de tu backend
       window.open(url, '_blank'); // Abre el archivo en una nueva pestaña
     } else {
       console.error('El documento no tiene un ID válido.');
@@ -157,32 +157,20 @@ export class HomeComponent {
 
   editarDocumento(documento: Documento) {
     this.router.navigate(['/crear-documento', { documentoEditar: documento.id_documento }]);
-}
+  }
 
-eliminarDocumento(id: number) {
-  Swal.fire({
-    title: '¿Estás seguro de eliminar?',
-    text: 'Esta acción no se puede deshacer.',
-    icon: 'warning',
-    showCancelButton: true,
-    confirmButtonText: 'Sí, eliminar',
-    cancelButtonText: 'Cancelar',
-  }).then((result) => {
-    if (result.isConfirmed) {
-      this.documentoService.deleteDocumento(id).subscribe({
-        next: (response: any) => {
-          Swal.fire({
-            text: 'Documento Eliminado Correctamente',
-            icon: 'success',
-            confirmButtonText: 'Aceptar',
-          }).then((result) => {
-            if (result.isConfirmed) {
-              window.location.reload();
-            }
-          });
-        },
-        error: (error: HttpErrorResponse) => {
-          if (error.status === 200) {
+  eliminarDocumento(id: number) {
+    Swal.fire({
+      title: '¿Estás seguro de eliminar?',
+      text: 'Esta acción no se puede deshacer.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, eliminar',
+      cancelButtonText: 'Cancelar',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.documentoService.deleteDocumento(id).subscribe({
+          next: (response: any) => {
             Swal.fire({
               text: 'Documento Eliminado Correctamente',
               icon: 'success',
@@ -192,15 +180,27 @@ eliminarDocumento(id: number) {
                 window.location.reload();
               }
             });
-          } else {
-            Swal.fire({
-              text: 'Ocurrió un error al eliminar: ' + error.error,
-              icon: 'error',
-            });
-          }
-        },
-      });
-    }
-  });
-}
+          },
+          error: (error: HttpErrorResponse) => {
+            if (error.status === 200) {
+              Swal.fire({
+                text: 'Documento Eliminado Correctamente',
+                icon: 'success',
+                confirmButtonText: 'Aceptar',
+              }).then((result) => {
+                if (result.isConfirmed) {
+                  window.location.reload();
+                }
+              });
+            } else {
+              Swal.fire({
+                text: 'Ocurrió un error al eliminar: ' + error.error,
+                icon: 'error',
+              });
+            }
+          },
+        });
+      }
+    });
+  }
 }

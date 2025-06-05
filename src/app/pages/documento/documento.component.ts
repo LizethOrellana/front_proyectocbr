@@ -117,7 +117,7 @@ export class DocumentoComponent implements OnInit {
       const formData = new FormData();
       if (this.mantenerArchivo == false) {
         if (this.selectedFile) {
-          
+
           formData.append('file', this.selectedFile, this.selectedFile.name);
         }
       } else {
@@ -132,7 +132,7 @@ export class DocumentoComponent implements OnInit {
       formData.append('autorId', this.documento.autor.id_autor.toString());
       formData.append('carreraId', this.documento.carrera.id_carrera.toString());
       console.log(formData)
-      this.http.post('http://ec2-18-218-153-234.us-east-2.compute.amazonaws.com:8080/api/documentos/crear', formData).subscribe(
+      this.http.post('http://82.29.155.55:8080/api/documentos/crear', formData).subscribe(
         (response: any) => {
           Swal.fire({
             text: 'Documento Guardado Correctamente',
