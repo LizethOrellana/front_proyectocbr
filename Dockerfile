@@ -15,7 +15,7 @@ RUN npm install
 COPY . .
 
 # Build the Angular application for production
-RUN npx ng build --configuration production --browser-target=front_proyectocbr:build
+RUN npx ng build --configuration production --no-prerender
 
 # Stage 2: Serve the built application with a lightweight web server (e.g., nginx)
 FROM nginx:alpine
