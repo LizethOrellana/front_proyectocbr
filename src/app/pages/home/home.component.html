@@ -4,7 +4,8 @@
   </div>
 
   <div class="search-bar">
-    <input type="text" [(ngModel)]="nombreBusqueda" placeholder="Buscar documentos...">
+    <input type="text" [(ngModel)]="nombreBusqueda" (ngModelChange)="onInputBuscar($event)"
+      placeholder="Buscar documento...">
     <button (click)="buscarDocumentos()">Buscar</button>
   </div>
 
@@ -34,7 +35,7 @@
           Año de Publicación
           <button class="buttonpositivo" (click)="generarAnios()">{{ mostrarAnios ? '-' : '+' }}</button>
           <div *ngIf="mostrarAnios" class="contenedor-scroll">
-            <div *ngFor="let anio of anios" class="autor-item"  style="justify-content: center;">
+            <div *ngFor="let anio of anios" class="autor-item" style="justify-content: center;">
               <button class="buttonFilter" (click)="buscarxAnio(anio)">{{anio}}</button>
             </div>
           </div>
@@ -59,7 +60,8 @@
           </div>
           <div class="button-container">
             <button class="view-document" (click)="verDocumento(documento)">Ver documento</button>
-            <button class="view-document" *ngIf="!mostrarBotonInicioSesion" (click)="editarDocumento(documento)">Editar</button>
+            <button class="view-document" *ngIf="!mostrarBotonInicioSesion"
+              (click)="editarDocumento(documento)">Editar</button>
             <button class="view-document" *ngIf="documento.id_documento && !mostrarBotonInicioSesion"
               (click)="eliminarDocumento(documento.id_documento)">Eliminar</button>
           </div>

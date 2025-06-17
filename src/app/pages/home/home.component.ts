@@ -14,6 +14,8 @@ import { AuthService } from '../../services/auth.service';
 import { Injectable, PLATFORM_ID, Inject } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
+import { Subject } from 'rxjs';
+import { debounceTime } from 'rxjs/operators';
 
 @Component({
   selector: 'app-home',
@@ -38,6 +40,9 @@ export class HomeComponent {
   usuarioLogueado: Usuario | null = null;
   mostrarBotonInicioSesion = true;
 
+  busqueda$ = new Subject<string>();
+
+
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
     private authService: AuthService,
@@ -50,7 +55,39 @@ export class HomeComponent {
     this.usuarioLogueado = this.authService.getUsuarioLogueado();
     this.mostrarBotonInicioSesion = !this.usuarioLogueado;
     this.obtenerDocumentos();
+
+    this.busqueda$
+      .pipe(debounceTime(300)) // espera 300 ms después del último caracter
+      .subscribe((termino: string) => {
+        if (!termino.trim()) {
+          this.obtenerDocumentos();
+          return;
+        }
+
+        this.documentoService.buscarPorNombre(termino).subscribe(
+          (documentos) => {
+            this.documentos = documentos;
+            if (documentos.length === 0) {
+              Swal.fire({
+                text: 'No se encontraron documentos con este nombre',
+                icon: 'warning',
+              });
+            }
+          },
+          (error) => {
+            Swal.fire({
+              text: 'Ocurrió un error al buscar: ' + error.message,
+              icon: 'error',
+            });
+          }
+        );
+      });
   }
+
+  onInputBuscar(nombre: string): void {
+    this.busqueda$.next(nombre);
+  }
+
 
   obtenerDocumentos() {
     this.documentoService.obtenerDocumentos().subscribe((response: Documento[]) => {
